@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lic. Catalina Barrio — Psicóloga Deportiva de Fútbol Femenino</title>
 <meta name="description" content="Psicóloga deportiva especializada en fútbol femenino. Acompañamiento a jugadoras, cuerpos técnicos e instituciones.">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -47,11 +47,11 @@
       <p class="hero__eyebrow">Psicóloga</p>
       <h1 class="hero__title">Catalina <span class="accent">Barrio</span></h1>
       <p class="hero__tagline">Tu mente, tu ventaja competitiva.</p>
-      <p class="hero__sub">Psicóloga deportiva de fútbol femenino. Trabajo la cabeza de la jugadora con la misma seriedad con la que se entrena el cuerpo.</p>
+      <p class="hero__sub">Psicóloga deportiva de fútbol femenino.</p>
     </div>
     <div class="hero__photo">
       <div class="hero__photo-frame">
-        <img src="hero-cata-arco.png" alt="Lic. Catalina Barrio">
+        <img src="hero-cata-nueva.png" alt="Lic. Catalina Barrio">
       </div>
       <a href="#programas" class="btn hero__photo-cta">Conocer los programas</a>
     </div>
@@ -82,7 +82,13 @@
       <p class="eyebrow">Lo que se trabajó</p>
       <h2 class="section-title">Testimonios reales</h2>
     </div>
-    <div class="testimonios-grid reveal" id="grid-testimonios"></div>
+    <div class="carousel-wrap reveal">
+      <div class="testimonios-track" id="grid-testimonios"></div>
+      <div class="carousel-nav">
+        <button id="prev-testimonio" aria-label="Anterior">&#8592;</button>
+        <button id="next-testimonio" aria-label="Siguiente">&#8594;</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -90,22 +96,41 @@
 <section id="sobre-mi">
   <div class="container">
     <div class="section-head reveal">
-      <p class="eyebrow">Quién soy</p>
+      <p class="eyebrow">Conocé más</p>
+      <h2 class="section-title">Quién soy</h2>
     </div>
     <div class="sobre-mi reveal">
       <div class="sobre-mi__photo">
         <div class="sobre-mi__photo-frame">
-          <img src="hero-catalina.png" alt="Lic. Catalina Barrio">
-        </div>
-        <div class="sobre-mi__clubes">
-          <span class="sobre-mi__clubes-label">Clubes</span>
-          <div class="row-clubes" id="row-clubes"></div>
+          <img src="quiensoy.png" alt="Lic. Catalina Barrio">
         </div>
       </div>
       <div class="sobre-mi__text">
-        <p>Soy Licenciada en Psicología, especializada en psicología del deporte aplicada al fútbol femenino. Trabajo con jugadoras de distintas categorías, acompañando el proceso mental que sostiene el rendimiento dentro y fuera de la cancha.</p>
-        <p>[Acá va tu trayectoria real — dónde estudiaste, en qué clubes trabajaste, hace cuánto te dedicás a esto, alguna formación o especialización puntual. Contámelo y lo dejamos armado.]</p>
-        <p>[Espacio para una línea personal — qué te conectó con el fútbol femenino, por qué elegiste este camino.]</p>
+
+        <div class="sm-contact-row" id="sm-contacto"></div>
+
+        <div class="row-clubes-grandes" id="row-clubes-grandes"></div>
+
+        <div class="sm-three-col">
+          <div class="sm-block">
+            <h3 class="sm-block__title">Estudios</h3>
+            <ul class="sm-lista sm-lista--colapsable" id="sm-estudios"></ul>
+            <button class="ver-todas" data-target="sm-estudios">Ver todas</button>
+          </div>
+
+          <div class="sm-block">
+            <h3 class="sm-block__title">Certificaciones</h3>
+            <ul class="sm-lista sm-lista--colapsable" id="sm-certificaciones"></ul>
+            <button class="ver-todas" data-target="sm-certificaciones">Ver todas</button>
+          </div>
+
+          <div class="sm-block">
+            <h3 class="sm-block__title">Experiencia laboral</h3>
+            <ul class="sm-lista sm-lista--colapsable" id="sm-experiencia"></ul>
+            <button class="ver-todas" data-target="sm-experiencia">Ver todas</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -115,11 +140,17 @@
 <section id="camisetas" style="background:var(--bg-panel-2)">
   <div class="container">
     <div class="section-head reveal">
-      <p class="eyebrow">Gracias por confiar</p>
-      <h2 class="section-title">Gratitud en la cancha</h2>
+      <p class="eyebrow">Gratitud en la cancha</p>
+      <h2 class="section-title">¡Gracias!</h2>
       <p class="lede">Camisetas obsequiadas por las jugadoras en agradecimiento al proceso.</p>
     </div>
-    <div class="camisetas-track reveal" id="track-camisetas"></div>
+    <div class="carousel-wrap reveal">
+      <div class="camisetas-track" id="track-camisetas"></div>
+      <div class="carousel-nav">
+        <button id="prev-camiseta" aria-label="Anterior">&#8592;</button>
+        <button id="next-camiseta" aria-label="Siguiente">&#8594;</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -137,6 +168,9 @@
 <!-- 7 y 8. ASESORÍAS + INSTITUCIONES -->
 <section id="asesorias">
   <div class="container">
+    <div class="asesorias-photo reveal">
+      <img src="asesorias.png" alt="Charla con cuerpo técnico y jugadoras">
+    </div>
     <div class="panel-dual reveal">
       <div class="panel">
         <span class="tag-inline">Cuerpos técnicos</span>
@@ -144,7 +178,7 @@
         <p>Charlas de una hora pensadas para entrenadores, dirigentes y cuerpos técnicos, con herramientas psicológicas concretas para la gestión del grupo dentro del día a día del club.</p>
         <a href="#contacto" class="btn btn--ghost">Consultar</a>
       </div>
-      <div class="panel panel--plum">
+      <div class="panel panel--navy">
         <span class="tag-inline">Clubes y federaciones</span>
         <h3>Charlas para instituciones</h3>
         <p>Capacitaciones y conferencias para clubes de fútbol, federaciones, colegios y universidades interesados en la psicología aplicada al fútbol femenino.</p>
@@ -159,23 +193,25 @@
   <div class="container">
     <div class="footer__top">
       <h2 class="footer__title">Hablemos de lo que necesitás trabajar.</h2>
-      <div class="footer__channels">
-        <a href="https://wa.me/5491100000000" class="footer__channel">WhatsApp</a>
-        <a href="mailto:contacto@catalinabarrio.com" class="footer__channel">contacto@catalinabarrio.com</a>
-        <a href="tel:+5491100000000" class="footer__channel">+54 9 11 0000-0000</a>
-      </div>
+      <div class="footer__channels" id="footer-channels"></div>
     </div>
+    <a href="https://wa.me/541156145694" target="_blank" rel="noopener" class="whatsapp-btn">
+      <svg class="whatsapp-btn__icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#06070a" d="M16 3C9.4 3 4 8.4 4 15c0 2.2.6 4.3 1.7 6.2L4 29l8-1.7C13.7 28.4 14.8 29 16 29c6.6 0 12-5.4 12-12S22.6 3 16 3zm6.4 15.7c-.3.7-1.5 1.3-2.1 1.4-.5.1-1.1.2-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.4.8-.4h.6c.2 0 .5-.1.7.5.2.6.8 2.1.9 2.3.1.1.2.3 0 .5-.1.1-.2.4-.3.5-.1.1-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.3 1.2 1.1 2.3 1.4 2.6 1.6.3.1.5.1.7-.1.2-.2.8-1 1-1.3.2-.4.4-.3.7-.2.3.1 1.9.9 2.2 1.1.3.1.5.2.6.4.1.2.1.7-.2 1.4z"/>
+      </svg>
+      Escribime al 11 5614-5694
+    </a>
     <div class="footer__bottom">
       <span>Lic. Catalina Barrio — Psicóloga Deportiva</span>
       <div class="footer__social">
-        <a href="#" aria-label="Instagram">IG</a>
+        <a href="https://instagram.com/lic.catalinabarrio" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
         <a href="#" aria-label="LinkedIn">in</a>
       </div>
     </div>
   </div>
 </footer>
 
-<script src="data.js"></script>
-<script src="main.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

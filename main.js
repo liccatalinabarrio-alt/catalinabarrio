@@ -40,19 +40,31 @@ function renderJugadoras() {
 
 // ---- Render: Testimonios ----
 function renderTestimonios() {
-  const grid = document.getElementById('grid-testimonios');
-  grid.innerHTML = TESTIMONIOS.map(t => `
+  const track = document.getElementById('grid-testimonios');
+  track.innerHTML = TESTIMONIOS.map((t, i) => `
     <div class="card-testimonio">
-      <div class="card-testimonio__top">
-        <span class="card-testimonio__avatar">
-          ${t.foto ? `<img src="${t.foto}" alt="${t.autor}">` : ''}
-        </span>
-        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="card-testimonio__photo">
+        ${t.foto
+          ? `<img src="${t.foto}" alt="${t.nombre}">`
+          : `<span class="card-testimonio__initials">${iniciales(t.nombre)}</span>`}
       </div>
-      <p>&ldquo;${t.texto}&rdquo;</p>
-      <div class="card-testimonio__autor">${t.autor}</div>
+      <div class="card-testimonio__body">
+        <div class="card-testimonio__name">${t.nombre}</div>
+        <div class="card-testimonio__club">${t.club}</div>
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p id="testimonio-texto-${i}">&ldquo;${t.texto}&rdquo;</p>
+        <button class="leer-mas" data-target="testimonio-texto-${i}">Leer más</button>
+      </div>
     </div>
   `).join('');
+
+  track.querySelectorAll('.leer-mas').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = document.getElementById(btn.dataset.target);
+      const expanded = p.classList.toggle('expanded');
+      btn.textContent = expanded ? 'Leer menos' : 'Leer más';
+    });
+  });
 }
 
 // ---- Render: Camisetas ----
@@ -71,15 +83,56 @@ function renderCamisetas() {
   `).join('');
 }
 
-// ---- Render: Clubes con los que trabajó (Quién soy) ----
-function renderClubesTrabajados() {
-  const row = document.getElementById('row-clubes');
+// ---- Render: Sobre mí (contacto, estudios, clubes grandes, certificaciones, experiencia) ----
+function renderContacto() {
+  const el = document.getElementById('sm-contacto');
+  if (!el) return;
+  el.innerHTML = `
+    <a class="sm-chip" href="https://wa.me/54${CONTACTO_PERSONAL.whatsapp}" target="_blank" rel="noopener">
+      <span class="sm-chip__icon">&#9742;</span> WhatsApp
+    </a>
+    <a class="sm-chip" href="https://instagram.com/${CONTACTO_PERSONAL.instagram.replace('@','')}" target="_blank" rel="noopener">
+      <span class="sm-chip__icon">@</span> ${CONTACTO_PERSONAL.instagram.replace('@','')}
+    </a>
+    <a class="sm-chip" href="mailto:${CONTACTO_PERSONAL.mail}">
+      <span class="sm-chip__icon">&#9993;</span> Mail
+    </a>
+  `;
+}
+
+function renderFooterContacto() {
+  const el = document.getElementById('footer-channels');
+  if (!el) return;
+  el.innerHTML = `
+    <a href="mailto:${CONTACTO_PERSONAL.mail}" class="footer__channel">${CONTACTO_PERSONAL.mail}</a>
+    <a href="https://instagram.com/${CONTACTO_PERSONAL.instagram.replace('@','')}" class="footer__channel" target="_blank" rel="noopener">${CONTACTO_PERSONAL.instagram}</a>
+  `;
+}
+
+function renderClubesGrandes() {
+  const row = document.getElementById('row-clubes-grandes');
   if (!row) return;
-  row.innerHTML = CLUBES_TRABAJADOS.map(c => `
-    <span class="club-badge" title="${c.club}">
+  row.innerHTML = CLUBES_GRANDES.map(c => `
+    <span class="club-grande" title="${c.club}">
       ${c.escudo ? `<img src="${c.escudo}" alt="Escudo de ${c.club}">` : ''}
     </span>
   `).join('');
+}
+
+function renderListaColapsable(id, items, visibles) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = items.map((item, i) => `<li class="${i >= visibles ? 'oculto' : ''}">${item}</li>`).join('');
+}
+
+function initVerTodas() {
+  document.querySelectorAll('.ver-todas').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lista = document.getElementById(btn.dataset.target);
+      const expandida = lista.classList.toggle('expandida');
+      btn.textContent = expandida ? 'Ver menos' : 'Ver todas';
+    });
+  });
 }
 
 // ---- Render: Programas ----
@@ -94,14 +147,20 @@ function renderProgramas() {
   `).join('');
 }
 
-// ---- Carrusel de jugadoras: flechas ----
-function initCarouselNav() {
-  const track = document.getElementById('carousel-jugadoras');
-  const prev = document.getElementById('prev-jugadora');
-  const next = document.getElementById('next-jugadora');
-  const step = () => track.querySelector('.card-jugadora')?.offsetWidth + 18 || 220;
+// ---- Carruseles con flechas (genérico) ----
+function initCarouselArrows(trackId, prevId, nextId, cardSelector) {
+  const track = document.getElementById(trackId);
+  const prev = document.getElementById(prevId);
+  const next = document.getElementById(nextId);
+  if (!track || !prev || !next) return;
+  const step = () => track.querySelector(cardSelector)?.offsetWidth + 18 || 220;
   prev.addEventListener('click', () => track.scrollBy({ left: -step() * 2, behavior: 'smooth' }));
   next.addEventListener('click', () => track.scrollBy({ left: step() * 2, behavior: 'smooth' }));
+}
+function initCarouselNav() {
+  initCarouselArrows('carousel-jugadoras', 'prev-jugadora', 'next-jugadora', '.card-jugadora');
+  initCarouselArrows('grid-testimonios', 'prev-testimonio', 'next-testimonio', '.card-testimonio');
+  initCarouselArrows('track-camisetas', 'prev-camiseta', 'next-camiseta', '.card-camiseta');
 }
 
 // ---- Reveal on scroll ----
@@ -163,7 +222,13 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHeroShield();
   renderJugadoras();
   renderTestimonios();
-  renderClubesTrabajados();
+  renderContacto();
+  renderFooterContacto();
+  renderListaColapsable('sm-estudios', ESTUDIOS, 2);
+  renderClubesGrandes();
+  renderListaColapsable('sm-certificaciones', CERTIFICACIONES, 3);
+  renderListaColapsable('sm-experiencia', EXPERIENCIA, 3);
+  initVerTodas();
   renderCamisetas();
   renderProgramas();
   initCarouselNav();

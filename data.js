@@ -212,52 +212,85 @@ const CTA_JUGADORAS = {
 // foto: dejá "" para usar el círculo vacío (placeholder)
 const TESTIMONIOS = [
   {
-    texto: "Había cosas inconscientes que de cierta manera las traje al consciente con lesiones o mal rendimiento, Cata me ayudó a trabajar esos pensamientos y las creencias que yo misma me creaba.",
-    autor: "Jugadora de Primera División",
-    foto: "",
+    nombre: "Delfina Zaputovich",
+    club: "Reserva River Plate",
+    foto: "testimoniorenata.png",
+    texto: "Trabajo con Cata hace 3 años, y desde el primer momento me ayudó a mejorar mi rendimiento deportivo trabajando diferentes aspectos como la frustración y la confianza que estaban influyendo en mi forma de jugar y entrenar.",
   },
   {
-    texto: "Había muchas cosas que me limitaban a la hora de jugar o entrenar, cada día se me hacía muy pesado y difícil de sobrellevar con muchos pensamientos negativos que impedían que yo pueda disfrutar de jugar o entrenar. Tengo la suerte de trabajar con Cata y ella me ayudó en cada paso.",
-    autor: "Jugadora de Primera División",
-    foto: "",
+    nombre: "Carolina Ceniza",
+    club: "Primera River Plate",
+    foto: "carotestimonio.png",
+    texto: "Hace 4 años que trabajo con Cata en mi proceso deportivo y fue una experiencia muy valiosa. La psicología deportiva me ayudó a crecer tanto dentro como fuera de la cancha, a disfrutar más del camino, ser más consciente de mis objetivos y desarrollar herramientas que hoy considero una verdadera ventaja en mi rendimiento. Estoy muy agradecida por todo lo aprendido y por la conexión que logré con mis propósitos y metas.",
   },
   {
-    texto: "Hace 4 años que trabajo con Cata en mi proceso deportivo y fue una experiencia muy valiosa. La psicología deportiva me ayudó a crecer tanto dentro como fuera de la cancha, a disfrutar más del camino, ser más consciente de mis objetivos.",
-    autor: "Jugadora de Primera División",
-    foto: "",
+    nombre: "Agustina Sánchez",
+    club: "Primera Belgrano de Córdoba y Selección Uruguaya",
+    foto: "testimonioagus.png",
+    texto: "Había muchas cosas que me limitaban a la hora de jugar o entrenar, cada día se me hacía muy pesado y difícil de sobrellevar con muchos pensamientos negativos que impedían que yo pueda disfrutar de jugar o entrenar. Tengo la suerte de trabajar con Cata y ella me ayudó en cada paso, a encontrar el por qué de las cosas y entenderlo para después trabajarlo y deje de ser un problema y sea algo por lo que solo tengo que pasar. Hoy en día puedo tranquilamente decir que disfruto de lo que hago en cada momento y tengo las herramientas necesarias para enfrentar cada situación que se me presente; volví a ser feliz jugando.",
   },
   {
-    texto: "[Espacio para el 4to testimonio — pasame el texto real y lo cargo acá]",
-    autor: "Jugadora de Primera División",
-    foto: "",
+    nombre: "Renata Barletta",
+    club: "Primera River Plate",
+    foto: "barlettatestimonio.png",
+    texto: "Había cosas inconscientes que de cierta manera las traje al consciente con lesiones o mal rendimiento, Cata me ayudó a trabajar esos pensamientos y las creencias que yo misma me creaba. Elegí a Cata hace ya casi tres años y noto muchos cambios tanto adentro como afuera de la cancha. Hoy en día puedo decir que sé de lo que soy capaz y más conectada conmigo misma.",
   },
   {
-    texto: "[Espacio para el 5to testimonio — pasame el texto real y lo cargo acá]",
-    autor: "Jugadora de Primera División",
-    foto: "",
-  },
-  {
-    texto: "[Espacio para el 6to testimonio — pasame el texto real y lo cargo acá]",
-    autor: "Jugadora de Primera División",
-    foto: "",
+    nombre: "Constanza Pacheco",
+    club: "Primera River Plate",
+    foto: "cotytestimonio.png",
+    texto: "En estos años trabajando con Cata aprendí a ser mucho más consciente, además de generar muchas herramientas que me potenciaron muchísimo dentro de la cancha, desde la confianza y el autoconocimiento. También trabajando mi identidad, desmintiendo creencias y autoexigencias, que me permiten vivir todo esto de una manera mucho más sana y linda tanto dentro como fuera de la cancha.",
   },
 ];
 
-// ---- CLUBES CON LOS QUE TRABAJÓ (4 escudos junto a la foto en "Quién soy") ----
-const CLUBES_TRABAJADOS = [
-  { club: "Club 1", escudo: "" },
-  { club: "Club 2", escudo: "" },
-  { club: "Club 3", escudo: "" },
-  { club: "Club 4", escudo: "" },
+// ---- SOBRE MÍ / QUIÉN SOY ----
+const CONTACTO_PERSONAL = {
+  whatsapp: "1156145694",
+  instagram: "@lic.catalinabarrio",
+  mail: "lic.catalinabarrio@gmail.com",
+};
+
+const ESTUDIOS = [
+  "Licenciatura en Psicología — Universidad del Salvador, 2018 a 2022 | MN: 79374",
+  "Participación en la Clínica de Psicología deportiva para Psicólogos “Saliendo a la cancha”, German Diorno",
+  "Diplomatura en coaching deportivo — UTN",
+  "Posgrado de Psicología aplicada al deporte y actividad física — APDA, 2024-2025",
+];
+
+// Escudos grandes de los clubes en los que trabajó (Quién soy)
+const CLUBES_GRANDES = [
+  { club: "Club Atlético Platense", escudo: "platense.png" },
+  { club: "San Lorenzo de Almagro", escudo: "casla.png" },
+];
+
+const CERTIFICACIONES = [
+  "Curso Psicología deportiva — Ácumen Sports",
+  "Curso Mentality — Ácumen Sports",
+  "Clínica de Psicología deportiva para Psicólogos “Saliendo a la cancha” — German Diorno",
+  "Cómo construir un equipo exitoso — Cesar Palmieri",
+  "La planificación psicológica en deportes de equipo — Cesar Palmieri",
+  "Psicología y fútbol — Cesar Palmieri",
+  "Rendir bajo presión — Cesar Palmieri",
+  "Romper la racha negativa — Cesar Palmieri",
+  "Entrenar la toma de decisiones — Cesar Palmieri",
+];
+
+const EXPERIENCIA = [
+  "Psicóloga deportiva — Acumen Sports",
+  "Psicóloga deportiva — Marangoni",
+  "Psicóloga deportiva — Sportas",
+  "Sesiones virtuales/presenciales con deportistas de alto rendimiento de fútbol",
+  "Psicóloga deportiva — Club Atlético Platense, Primera División Femenina",
+  "Psicóloga deportiva — Club Atlético San Lorenzo de Almagro, Primera División Femenina",
 ];
 
 // ---- CAMISETAS (galería "Gratitud en la cancha") — lugar para 8 ----
 // imagen: dejá "" para que aparezca como espacio vacío, listo para cargar
 const CAMISETAS = [
-  { imagen: "camiseta-pafundi.png", jugadora: "Pafundi", club: "San Lorenzo" },
-  { imagen: "", jugadora: "", club: "" },
-  { imagen: "", jugadora: "", club: "" },
-  { imagen: "", jugadora: "", club: "" },
+  { imagen: "paffundicamiseta.png", jugadora: "Pafundi", club: "San Lorenzo" },
+  { imagen: "nattacamiseta.png", jugadora: "Natta", club: "River" },
+  { imagen: "annikacamiseta.png", jugadora: "Annika", club: "Inter Milán" },
+  { imagen: "aguscamiseta.png", jugadora: "Agus", club: "Belgrano" },
   { imagen: "", jugadora: "", club: "" },
   { imagen: "", jugadora: "", club: "" },
   { imagen: "", jugadora: "", club: "" },
