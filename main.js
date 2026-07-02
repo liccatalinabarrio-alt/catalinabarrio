@@ -16,17 +16,26 @@ function renderJugadoras() {
         ${j.foto
           ? `<img src="${j.foto}" alt="${j.nombre}">`
           : `<span class="card-jugadora__initials">${iniciales(j.nombre)}</span>`}
-        <span class="card-jugadora__flag">${j.pais}</span>
-        <span class="card-jugadora__shield-badge" title="${j.club}">
-          ${j.escudo ? `<img src="${j.escudo}" alt="Escudo de ${j.club}">` : ''}
+        <span class="card-jugadora__flag flag-${j.pais.toLowerCase()}" title="${j.pais}"></span>
+        <span class="card-jugadora__shields">
+          ${j.afiliaciones.filter(a => a.escudo).map(a => `
+            <img class="card-jugadora__shield-img" src="${a.escudo}" alt="Escudo de ${a.nombre}" title="${a.nombre}">
+          `).join('')}
         </span>
       </div>
       <div class="card-jugadora__body">
         <div class="card-jugadora__name">${j.nombre}</div>
-        <div class="card-jugadora__meta">${j.club} · ${j.posicion}</div>
+        ${j.posicion ? `<div class="card-jugadora__posicion">${j.posicion}</div>` : ''}
+        <div class="card-jugadora__afiliaciones">
+          ${j.afiliaciones.map(a => `<div>${a.nombre}</div>`).join('')}
+        </div>
       </div>
     </div>
-  `).join('');
+  `).join('') + `
+    <a href="${CTA_JUGADORAS.whatsapp}" target="_blank" rel="noopener" class="card-jugadora card-jugadora--cta">
+      <span class="card-jugadora--cta__texto">${CTA_JUGADORAS.titulo}</span>
+    </a>
+  `;
 }
 
 // ---- Render: Testimonios ----
@@ -114,6 +123,9 @@ function renderHeroShield() {
   const el = document.getElementById('hero-shield');
   if (CLUB_SHIELD) {
     el.innerHTML = `<img src="${CLUB_SHIELD}" alt="Escudo del club">`;
+    el.style.display = 'flex';
+  } else {
+    el.style.display = 'none';
   }
 }
 

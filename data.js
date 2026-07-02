@@ -9,14 +9,204 @@
 const CLUB_SHIELD = "";
 
 // ---- JUGADORAS (carrusel "Jugadoras que potencian su mente") ----
-// foto y escudo: dejá "" para usar el placeholder
+// foto: dejá "" para usar el placeholder
+// afiliaciones: lista de { nombre, escudo } — un item por club/selección.
+//   escudo: "" si todavía no tenés esa imagen (se muestra el nombre igual, sin escudo)
+// Orden: primero las que juegan en alguna selección, después el resto.
 const JUGADORAS = [
-  { nombre: "Nombre Apellido", club: "Club", posicion: "Delantera", pais: "AR", foto: "", escudo: "" },
-  { nombre: "Nombre Apellido", club: "Club", posicion: "Mediocampista", pais: "AR", foto: "", escudo: "" },
-  { nombre: "Nombre Apellido", club: "Club", posicion: "Defensora", pais: "AR", foto: "", escudo: "" },
-  { nombre: "Nombre Apellido", club: "Club", posicion: "Arquera", pais: "AR", foto: "", escudo: "" },
-  { nombre: "Nombre Apellido", club: "Club", posicion: "Delantera", pais: "AR", foto: "", escudo: "" },
+  {
+    nombre: "Annika Paz",
+    posicion: "",
+    pais: "IT",
+    foto: "annikapaz.png",
+    afiliaciones: [
+      { nombre: "Inter de Milán", escudo: "inter-annika.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika-afa.png" },
+    ],
+  },
+  {
+    nombre: "Maricel Pereyra",
+    posicion: "",
+    pais: "BR",
+    foto: "maricel.png",
+    afiliaciones: [
+      { nombre: "São Paulo", escudo: "saopaulo-escudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika-afa.png" },
+    ],
+  },
+  {
+    nombre: "Agustina Sánchez",
+    posicion: "",
+    pais: "AR",
+    foto: "agussanchez.png",
+    afiliaciones: [
+      { nombre: "Belgrano de Córdoba", escudo: "belgrano-escudo.png" },
+      { nombre: "Selección Femenina Uruguaya", escudo: "uruguay-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Carolina Ceniza",
+    posicion: "",
+    pais: "AR",
+    foto: "caroceniza.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "river-escudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika-afa.png" },
+    ],
+  },
+  {
+    nombre: "Vaitiare Prado",
+    posicion: "",
+    pais: "CL",
+    foto: "vaitiareprado.png",
+    afiliaciones: [
+      { nombre: "Universidad Católica", escudo: "uca-escudo.png" },
+      { nombre: "Selección Femenina de Chile", escudo: "chile-fedefutbol.png" },
+    ],
+  },
+  {
+    nombre: "Luciana Gómez",
+    posicion: "",
+    pais: "AR",
+    foto: "lugomez.png",
+    afiliaciones: [
+      { nombre: "Belgrano de Córdoba", escudo: "belgrano-escudo.png" },
+      { nombre: "Selección Femenina Uruguaya", escudo: "uruguay-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Magalí Natta",
+    posicion: "",
+    pais: "AR",
+    foto: "natta.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "river-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Catalina Dos Reis",
+    posicion: "",
+    pais: "AR",
+    foto: "catadosreis.png",
+    afiliaciones: [
+      { nombre: "Talleres de Córdoba", escudo: "talleres-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Belén Taborda",
+    posicion: "",
+    pais: "IT",
+    foto: "taborda.png",
+    afiliaciones: [
+      { nombre: "Donna Roma", escudo: "roma-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Delfina Pafundi",
+    posicion: "",
+    pais: "AR",
+    foto: "pafundi-foto.png",
+    afiliaciones: [
+      { nombre: "San Lorenzo de Almagro", escudo: "casla-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Renatta Barletta",
+    posicion: "",
+    pais: "AR",
+    foto: "barletta.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "river-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Victoria Arrieto",
+    posicion: "",
+    pais: "AR",
+    foto: "coloarrieto.png",
+    afiliaciones: [
+      { nombre: "Belgrano de Córdoba", escudo: "belgrano-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Micaela Bulacio",
+    posicion: "",
+    pais: "AR",
+    foto: "bulacio.png",
+    afiliaciones: [
+      { nombre: "Belgrano de Córdoba", escudo: "belgrano-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Constanza Pacheco",
+    posicion: "",
+    pais: "AR",
+    foto: "cotypacheco.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "river-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Jazmín Acetelgaray",
+    posicion: "",
+    pais: "AR",
+    foto: "acetelgaray.png",
+    afiliaciones: [
+      { nombre: "Club Atlético Huracán", escudo: "huracan-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Lourdes González",
+    posicion: "",
+    pais: "AR",
+    foto: "lourdesg.png",
+    afiliaciones: [
+      { nombre: "San Lorenzo de Almagro", escudo: "casla-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Albertina Sandoval",
+    posicion: "",
+    pais: "AR",
+    foto: "albertina.png",
+    afiliaciones: [
+      { nombre: "Boca Juniors", escudo: "boca-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Delfina Zaputovich",
+    posicion: "",
+    pais: "AR",
+    foto: "zaputovich.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "river-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Ara Saleme",
+    posicion: "",
+    pais: "AR",
+    foto: "saleme.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "river-escudo.png" },
+    ],
+  },
+  {
+    nombre: "Martina Schmidt",
+    posicion: "",
+    pais: "US",
+    foto: "schmidt.png",
+    afiliaciones: [
+      { nombre: "Monroe University", escudo: "" },
+    ],
+  },
 ];
+
+// ---- Tarjeta final del carrusel, invitando a sumarse ----
+const CTA_JUGADORAS = {
+  titulo: "¿Querés ser la próxima?",
+  whatsapp: "https://wa.me/5491100000000",
+};
 
 // ---- TESTIMONIOS ----
 // foto: dejá "" para usar el círculo vacío (placeholder)
