@@ -32,7 +32,7 @@ const TESTIMONIOS = [
 
 // ---- CAMISETAS (galería "Gratitud en la cancha") ----
 const CAMISETAS = [
-  { imagen: "assets/camiseta-pafundi.png", jugadora: "Pafundi", club: "San Lorenzo" },
+  { imagen: "camiseta-pafundi.png", jugadora: "Pafundi", club: "San Lorenzo" },
 ];
 
 // ---- PROGRAMAS (burbujas de servicios) ----

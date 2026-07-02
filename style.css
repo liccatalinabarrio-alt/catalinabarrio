@@ -120,7 +120,7 @@ section { position: relative; padding: clamp(64px, 10vw, 120px) 0; }
 .hero__bg {
   position: absolute;
   inset: 0;
-  background: url('../assets/hero-catalina.png') center 22% / cover no-repeat;
+  background: url('hero-catalina.png') center 22% / cover no-repeat;
 }
 .hero__scrim {
   position: absolute;
