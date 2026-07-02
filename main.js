@@ -17,13 +17,13 @@ function renderJugadoras() {
           ? `<img src="${j.foto}" alt="${j.nombre}">`
           : `<span class="card-jugadora__initials">${iniciales(j.nombre)}</span>`}
         <span class="card-jugadora__flag">${j.pais}</span>
+        <span class="card-jugadora__shield-badge" title="${j.club}">
+          ${j.escudo ? `<img src="${j.escudo}" alt="Escudo de ${j.club}">` : ''}
+        </span>
       </div>
       <div class="card-jugadora__body">
         <div class="card-jugadora__name">${j.nombre}</div>
-        <div class="card-jugadora__meta">
-          <span class="card-jugadora__shield" title="${j.club}"></span>
-          ${j.club} · ${j.posicion}
-        </div>
+        <div class="card-jugadora__meta">${j.club} · ${j.posicion}</div>
       </div>
     </div>
   `).join('');
@@ -34,7 +34,12 @@ function renderTestimonios() {
   const grid = document.getElementById('grid-testimonios');
   grid.innerHTML = TESTIMONIOS.map(t => `
     <div class="card-testimonio">
-      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="card-testimonio__top">
+        <span class="card-testimonio__avatar">
+          ${t.foto ? `<img src="${t.foto}" alt="${t.autor}">` : ''}
+        </span>
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
       <p>&ldquo;${t.texto}&rdquo;</p>
       <div class="card-testimonio__autor">${t.autor}</div>
     </div>
@@ -44,11 +49,27 @@ function renderTestimonios() {
 // ---- Render: Camisetas ----
 function renderCamisetas() {
   const track = document.getElementById('track-camisetas');
-  track.innerHTML = CAMISETAS.map(c => `
+  track.innerHTML = CAMISETAS.map(c => c.imagen ? `
     <div class="card-camiseta">
       <img src="${c.imagen}" alt="Camiseta regalada por ${c.jugadora}, ${c.club}">
       <div class="card-camiseta__tag">${c.jugadora} · ${c.club}</div>
     </div>
+  ` : `
+    <div class="card-camiseta card-camiseta--vacia">
+      <span class="card-camiseta__plus">+</span>
+      <span class="card-camiseta__label">Agregar camiseta</span>
+    </div>
+  `).join('');
+}
+
+// ---- Render: Clubes con los que trabajó (Quién soy) ----
+function renderClubesTrabajados() {
+  const row = document.getElementById('row-clubes');
+  if (!row) return;
+  row.innerHTML = CLUBES_TRABAJADOS.map(c => `
+    <span class="club-badge" title="${c.club}">
+      ${c.escudo ? `<img src="${c.escudo}" alt="Escudo de ${c.club}">` : ''}
+    </span>
   `).join('');
 }
 
@@ -88,9 +109,49 @@ function initReveal() {
   els.forEach(el => io.observe(el));
 }
 
+// ---- Render: Escudo del club en el hero ----
+function renderHeroShield() {
+  const el = document.getElementById('hero-shield');
+  if (CLUB_SHIELD) {
+    el.innerHTML = `<img src="${CLUB_SHIELD}" alt="Escudo del club">`;
+  }
+}
+
+// ---- Menú (rayas) ----
+function initMenu() {
+  const toggle = document.getElementById('menu-toggle');
+  const overlay = document.getElementById('menu-overlay');
+
+  function closeMenu() {
+    overlay.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function openMenu() {
+    overlay.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+
+  toggle.addEventListener('click', () => {
+    const isOpen = overlay.classList.contains('open');
+    isOpen ? closeMenu() : openMenu();
+  });
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeMenu();
+  });
+  overlay.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  initMenu();
+  renderHeroShield();
   renderJugadoras();
   renderTestimonios();
+  renderClubesTrabajados();
   renderCamisetas();
   renderProgramas();
   initCarouselNav();

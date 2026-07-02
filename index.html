@@ -9,15 +9,41 @@
 </head>
 <body>
 
+<div class="bg-fx">
+  <div class="bg-fx__grid"></div>
+  <div class="bg-fx__orb bg-fx__orb--1"></div>
+  <div class="bg-fx__orb bg-fx__orb--2"></div>
+  <div class="bg-fx__orb bg-fx__orb--3"></div>
+</div>
+
+
 <nav class="nav">
   <div class="nav__mark">Catalina <span>Barrio</span></div>
-  <a href="#contacto" class="nav__cta">Contacto</a>
+  <div class="nav__right">
+    <a href="#contacto" class="nav__cta">Contacto</a>
+    <button class="nav__burger" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+
+<div class="menu-overlay" id="menu-overlay">
+  <ul class="menu-overlay__list">
+    <li><a href="#jugadoras" class="menu-link">Jugadoras</a></li>
+    <li><a href="#testimonios" class="menu-link">Testimonios</a></li>
+    <li><a href="#sobre-mi" class="menu-link">Sobre mí</a></li>
+    <li><a href="#camisetas" class="menu-link">Gratitud en la cancha</a></li>
+    <li><a href="#programas" class="menu-link">Programas</a></li>
+    <li><a href="#asesorias" class="menu-link">Asesorías y charlas</a></li>
+    <li><a href="#contacto" class="menu-link">Contacto</a></li>
+  </ul>
+</div>
 
 <!-- 1. HERO -->
 <header class="hero">
   <div class="hero__bg"></div>
   <div class="hero__scrim"></div>
+  <div class="hero__shield" id="hero-shield"><span>Escudo</span></div>
   <div class="container hero__content">
     <p class="hero__eyebrow">Psicóloga</p>
     <h1 class="hero__title">Catalina<br><span class="accent">Barrio</span></h1>
@@ -63,7 +89,13 @@
     </div>
     <div class="sobre-mi reveal">
       <div class="sobre-mi__photo">
-        <img src="hero-catalina.png" alt="Lic. Catalina Barrio">
+        <div class="sobre-mi__photo-frame">
+          <img src="hero-catalina.png" alt="Lic. Catalina Barrio">
+        </div>
+        <div class="sobre-mi__clubes">
+          <span class="sobre-mi__clubes-label">Clubes</span>
+          <div class="row-clubes" id="row-clubes"></div>
+        </div>
       </div>
       <div class="sobre-mi__text">
         <p>Soy Licenciada en Psicología, especializada en psicología del deporte aplicada al fútbol femenino. Trabajo con jugadoras de distintas categorías, acompañando el proceso mental que sostiene el rendimiento dentro y fuera de la cancha.</p>
