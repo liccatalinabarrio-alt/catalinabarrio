@@ -3,215 +3,1449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lic. Catalina Barrio — Psicóloga Deportiva de Fútbol Femenino</title>
-<meta name="description" content="Psicóloga deportiva especializada en fútbol femenino. Acompañamiento a jugadoras, cuerpos técnicos e instituciones.">
-<link rel="stylesheet" href="style.css">
+<title>psi.catalinabarrio · Sistema</title>
+<script type="module">
+// ── FIREBASE CONFIG ──────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLZPk_Bvh4crUEsBAN9gso3HAUTPBNpLc",
+  authDomain: "catalinabarrio-42a96.firebaseapp.com",
+  projectId: "catalinabarrio-42a96",
+  storageBucket: "catalinabarrio-42a96.firebasestorage.app",
+  messagingSenderId: "685731484154",
+  appId: "1:685731484154:web:fe366e4bd02f21b6cf5443"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ── PENDING ──────────────────────────────────────────────
+window._fbSavePending = async function(data) {
+  try {
+    await addDoc(collection(db, "pending"), data);
+    return true;
+  } catch(e) {
+    console.error("Error guardando pending:", e);
+    return false;
+  }
+};
+
+window._fbListenPending = function(callback) {
+  const q = query(collection(db, "pending"), orderBy("timestamp", "desc"));
+  return onSnapshot(q, (snapshot) => {
+    const items = snapshot.docs.map(d => ({id: d.id, ...d.data()}));
+    callback(items);
+  });
+};
+
+window._fbDeletePending = async function(id) {
+  try {
+    await deleteDoc(doc(db, "pending", id));
+    return true;
+  } catch(e) {
+    console.error("Error eliminando pending:", e);
+    return false;
+  }
+};
+
+// ── PLAYERS ──────────────────────────────────────────────
+window._fbSavePlayer = async function(player) {
+  try {
+    await setDoc(doc(db, "players", player.id), player);
+    return true;
+  } catch(e) {
+    console.error("Error guardando player:", e);
+    return false;
+  }
+};
+
+window._fbDeletePlayer = async function(id) {
+  try {
+    await deleteDoc(doc(db, "players", id));
+    return true;
+  } catch(e) {
+    console.error("Error eliminando player:", e);
+    return false;
+  }
+};
+
+window._fbListenPlayers = function(callback) {
+  return onSnapshot(collection(db, "players"), (snapshot) => {
+    const items = snapshot.docs.map(d => ({...d.data()}));
+    callback(items);
+  });
+};
+
+// ── MIS SESIONES ─────────────────────────────────────────
+window._fbSaveMySession = async function(session) {
+  try {
+    await setDoc(doc(db, "mySessions", session.id), session);
+    return true;
+  } catch(e) {
+    console.error("Error guardando mySession:", e);
+    return false;
+  }
+};
+
+window._fbDeleteMySession = async function(id) {
+  try {
+    await deleteDoc(doc(db, "mySessions", id));
+    return true;
+  } catch(e) {
+    console.error("Error eliminando mySession:", e);
+    return false;
+  }
+};
+
+window._fbListenMySessions = function(callback) {
+  return onSnapshot(collection(db, "mySessions"), (snapshot) => {
+    const items = snapshot.docs.map(d => ({...d.data()}));
+    callback(items);
+  });
+};
+
+window._firebaseReady = true;
+document.dispatchEvent(new Event('firebaseReady'));
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B3E;--navy2:#162040;--navy3:#0A1228;
+  --gold:#C9A84C;--gold-lt:#F0D080;--gold-dim:#8A6E2A;
+  --cream:#F5F0E8;--white:#FFFFFF;--gray:#8A9BB5;
+  --border:#2A3A5E;--card:#111F45;--input-bg:#0E1D40;
+  --danger:#E74C3C;--tag-bg:#1A2E55;--purple:#7B5EA7;--green:#27AE60;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy3);color:var(--white);min-height:100vh;display:flex;flex-direction:column}
+
+/* LOGIN */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;flex-direction:column;gap:1.5rem}
+.login-box{background:var(--navy);border:1px solid var(--border);border-radius:14px;padding:2.5rem 2rem;width:100%;max-width:380px;text-align:center;position:relative;overflow:hidden}
+.login-box::before{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:var(--gold)}
+.login-brand{font-size:.72rem;font-weight:700;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.75rem}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--white);margin-bottom:.4rem}
+.login-sub{font-size:.83rem;color:var(--gray);margin-bottom:1.75rem;line-height:1.5}
+.login-field{margin-bottom:.9rem;text-align:left}
+.login-field label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:.38rem}
+.login-field input{width:100%;padding:.68rem .9rem;background:var(--input-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--white);font-size:.95rem;font-family:'Inter',sans-serif;transition:border-color .15s}
+.login-field input:focus{outline:none;border-color:var(--gold)}
+.login-field input::placeholder{color:var(--gray)}
+.btn-login{width:100%;background:var(--gold);color:var(--navy);border:none;padding:.78rem;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:.4rem;transition:background .15s;letter-spacing:.04em}
+.btn-login:hover{background:var(--gold-lt)}
+.login-error{color:#E74C3C;font-size:.8rem;margin-top:.55rem;display:none}
+.login-divider{margin:1.4rem 0 1.1rem;border:none;border-top:1px solid var(--border)}
+.login-form-txt{font-size:.78rem;color:var(--gray);margin-bottom:.5rem}
+.btn-go-form{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--gray);padding:.55rem;border-radius:8px;font-size:.8rem;cursor:pointer;transition:all .15s}
+.btn-go-form:hover{border-color:var(--gold);color:var(--gold)}
+.topbar-logout{background:transparent;border:1px solid var(--border);color:var(--gray);padding:.38rem .75rem;border-radius:6px;font-size:.75rem;cursor:pointer;transition:all .15s}
+.topbar-logout:hover{border-color:var(--danger);color:var(--danger)}
+
+/* TOPBAR */
+.topbar{background:var(--navy);border-bottom:1px solid var(--border);padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:.75rem;flex-wrap:wrap}
+.topbar-left{display:flex;align-items:center;gap:.6rem;min-width:0}
+.topbar-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;flex-shrink:0}
+.topbar-brand{font-size:.75rem;font-weight:700;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+.topbar-sep{color:var(--border);margin:0 .25rem}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--white);font-weight:400;white-space:nowrap}
+.topbar-nav{display:flex;gap:.35rem}
+.nav-btn{padding:.4rem .8rem;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--gray);transition:all .15s;white-space:nowrap}
+.nav-btn:hover{border-color:var(--gold);color:var(--gold)}
+.nav-btn.active{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.topbar-actions{display:flex;gap:.35rem}
+.btn-top{padding:.4rem .85rem;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;transition:background .15s;white-space:nowrap}
+.btn-gold{background:var(--gold);color:var(--navy)}.btn-gold:hover{background:var(--gold-lt)}
+.btn-purple{background:var(--purple);color:var(--white)}.btn-purple:hover{background:#9370c0}
+
+/* VISTAS */
+.view{display:none;flex:1;min-height:0}
+.view.active{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:270px;background:var(--navy);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;height:calc(100vh - 56px);position:sticky;top:56px}
+.sidebar-search{padding:.85rem;border-bottom:1px solid var(--border)}
+.sidebar-search input{width:100%;padding:.5rem .75rem;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.83rem;font-family:'Inter',sans-serif}
+.sidebar-search input::placeholder{color:var(--gray)}
+.sidebar-search input:focus{outline:none;border-color:var(--gold)}
+.sidebar-label{padding:.65rem 1rem .35rem;font-size:.68rem;font-weight:700;letter-spacing:.15em;color:var(--gray);text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:.4rem}
+.sidebar-label-count{font-size:.65rem;font-weight:700;padding:.1rem .38rem;border-radius:8px;background:var(--tag-bg);color:var(--gray)}
+.sidebar-sublabel{padding:.28rem 1rem .28rem 1.5rem;font-size:.7rem;font-weight:600;color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.4rem;transition:color .12s}
+.sidebar-sublabel:hover{color:var(--gold)}
+.sidebar-sublabel .sub-right{display:flex;align-items:center;gap:.35rem}
+.sidebar-sublabel .sub-count{font-size:.63rem;font-weight:700;padding:.1rem .35rem;border-radius:8px;background:var(--tag-bg);color:var(--gray)}
+.sidebar-sublabel .lock-icon{font-size:.72rem;opacity:.7}
+.pending-badge-dot{display:none;width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.players-list{overflow-y:auto;flex:1;padding:0 .45rem .5rem;min-height:0}
+.players-list::-webkit-scrollbar{width:3px}
+.players-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.sidebar-item{display:flex;align-items:center;gap:.6rem;padding:.6rem .7rem;border-radius:8px;cursor:pointer;transition:background .12s;margin-bottom:2px}
+.sidebar-item:hover{background:var(--tag-bg)}
+.sidebar-item.active{background:var(--tag-bg)}
+.sidebar-item.active.gold-accent{border-left:3px solid var(--gold);padding-left:calc(.7rem - 3px)}
+.sidebar-item.active.purple-accent{border-left:3px solid var(--purple);padding-left:calc(.7rem - 3px)}
+.sidebar-item.active.green-accent{border-left:3px solid var(--green);padding-left:calc(.7rem - 3px)}
+.s-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;flex-shrink:0;text-transform:uppercase;overflow:hidden}
+.s-avatar.gold-av{background:var(--navy2);border:1.5px solid var(--gold-dim);color:var(--gold)}
+.s-avatar.purple-av{background:var(--purple);color:var(--white);font-size:1rem}
+.s-avatar.green-av{background:#0d2218;border:1.5px solid var(--green);color:var(--green);font-size:1rem}
+.s-avatar img{width:100%;height:100%;object-fit:cover}
+.s-info{overflow:hidden;flex:1}
+.s-name{font-size:.86rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-meta{font-size:.7rem;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-count{font-size:.67rem;font-weight:700;padding:.12rem .4rem;border-radius:10px;flex-shrink:0}
+.s-count.gold-c{background:var(--tag-bg);color:var(--gold)}
+.s-count.purple-c{background:#2D1F4A;color:#B39DDB}
+.s-count.green-c{background:#0d2218;color:var(--green)}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:1.5rem 2rem}
+.main::-webkit-scrollbar{width:4px}
+.main::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;color:var(--gray);text-align:center;gap:.75rem}
+.empty-icon{font-size:2.5rem;opacity:.4}
+.empty-state h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--white);opacity:.5}
+.empty-state p{font-size:.85rem;max-width:280px;line-height:1.5}
+
+/* PLAYER HEADER */
+.pl-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem;gap:1rem;flex-wrap:wrap}
+.pl-header-info{display:flex;align-items:center;gap:1rem}
+.pl-avatar-lg{width:60px;height:60px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(--gold);text-transform:uppercase;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
+.pl-avatar-lg img{width:100%;height:100%;object-fit:cover}
+.pl-avatar-lg:hover::after{content:'📷';position:absolute;background:rgba(0,0,0,.6);inset:0;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.1rem}
+.pl-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;line-height:1.1}
+.pl-sub{font-size:.8rem;color:var(--gray);margin-top:.2rem}
+.pl-tags{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.35rem}
+.tag{background:var(--tag-bg);color:var(--gold);font-size:.68rem;font-weight:600;padding:.18rem .5rem;border-radius:10px;text-transform:uppercase}
+.tag.green{background:#0d2218;color:var(--green)}
+.hdr-btns{display:flex;gap:.45rem;align-items:flex-start;flex-wrap:wrap}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--gray);padding:.42rem .85rem;border-radius:6px;font-size:.8rem;cursor:pointer;transition:all .15s}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-outline-gold{background:transparent;border:1.5px solid var(--gold);color:var(--gold);padding:.42rem .85rem;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-outline-gold:hover{background:rgba(201,168,76,.1)}
+
+/* BANNERS */
+.next-banner{background:var(--tag-bg);border:1px solid var(--gold-dim);border-radius:8px;padding:.7rem 1rem;margin-bottom:1.1rem;display:flex;align-items:center;gap:.55rem;font-size:.84rem}
+.next-banner .dot{width:7px;height:7px;background:var(--gold);border-radius:50%;flex-shrink:0}
+.next-banner strong{color:var(--gold)}
+
+/* PROFILE CARD */
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:1.1rem;overflow:hidden}
+.profile-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;cursor:pointer}
+.profile-card-hdr:hover{background:rgba(255,255,255,.02)}
+.profile-card-lbl{font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.profile-card-body{display:none;padding:1rem;border-top:1px solid var(--border)}
+.profile-card.open .profile-card-body{display:block}
+.toggle-icon{color:var(--gray);font-size:.72rem;transition:transform .2s}
+.prof-photo-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem}
+.prof-photo-box{width:84px;height:84px;border-radius:10px;background:var(--navy2);border:1.5px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
+.prof-photo-box img{width:100%;height:100%;object-fit:cover}
+.prof-photo-box:hover::after{content:'📷';position:absolute;background:rgba(0,0,0,.7);inset:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--white)}
+.prof-photo-empty{color:var(--gray);font-size:.68rem;text-align:center;line-height:1.3;padding:.35rem}
+.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;flex:1}
+.pf-label{font-size:.63rem;font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:.15rem}
+.pf-value{font-size:.86rem;color:var(--cream);line-height:1.4}
+.pf-value.empty{color:var(--gray);font-style:italic}
+.prof-divider{border:none;border-top:1px solid var(--border);margin:.85rem 0}
+.prof-section-lbl{font-size:.68rem;font-weight:700;letter-spacing:.12em;color:var(--gray);text-transform:uppercase;margin-bottom:.65rem}
+.prof-full{margin-bottom:.65rem}
+
+/* SESSION CARDS */
+.sess-lbl{font-size:.68rem;font-weight:700;letter-spacing:.15em;color:var(--gray);text-transform:uppercase;margin-bottom:.7rem}
+.sess-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:.9rem;overflow:hidden}
+.sess-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;cursor:pointer;border-bottom:1px solid transparent}
+.sess-card.open .sess-card-hdr{border-bottom-color:var(--border)}
+.sess-card-hdr:hover{background:rgba(255,255,255,.02)}
+.sess-num{font-size:.68rem;font-weight:700;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+.sess-dates{display:flex;gap:.85rem;font-size:.8rem;color:var(--gray);margin-top:.18rem;flex-wrap:wrap}
+.sess-dates .dv{color:var(--white);font-weight:500}
+.sess-body{display:none;padding:1rem}
+.sess-card.open .sess-body{display:block}
+.sess-field{margin-bottom:1rem}
+.sess-field:last-child{margin-bottom:0}
+.sess-field-lbl{font-size:.68rem;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:.35rem}
+.sess-field-val{font-size:.86rem;line-height:1.6;color:var(--cream)}
+.sess-field-val.empty{color:var(--gray);font-style:italic}
+.sess-actions{display:flex;gap:.45rem;margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.btn-edit-s{background:transparent;border:1px solid var(--border);color:var(--gray);padding:.32rem .7rem;border-radius:5px;font-size:.76rem;cursor:pointer;transition:all .15s}
+.btn-edit-s:hover{border-color:var(--gold);color:var(--gold)}
+.btn-del-s{background:transparent;border:1px solid transparent;color:var(--gray);padding:.32rem .7rem;border-radius:5px;font-size:.76rem;cursor:pointer}
+.btn-del-s:hover{color:var(--danger)}
+
+/* PENDIENTES */
+.pend-section{background:var(--card);border:1px solid var(--green);border-radius:10px;margin-bottom:1.1rem;overflow:hidden}
+.pend-section-hdr{background:#0d2218;padding:.8rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.pend-section-lbl{font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--green);text-transform:uppercase}
+.pend-body{padding:1rem}
+.pend-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+.pend-field-lbl{font-size:.65rem;font-weight:700;letter-spacing:.08em;color:var(--gold);text-transform:uppercase}
+.pend-field-val{font-size:.82rem;color:var(--cream);margin-top:.1rem}
+.pend-full{margin-bottom:.6rem}
+.pend-actions{display:flex;gap:.5rem;margin-top:.85rem}
+.btn-approve{background:var(--green);color:var(--white);border:none;padding:.42rem .9rem;border-radius:6px;font-size:.8rem;font-weight:700;cursor:pointer}
+.btn-approve:hover{background:#229954}
+.btn-reject{background:transparent;border:1px solid var(--danger);color:var(--danger);padding:.42rem .9rem;border-radius:6px;font-size:.8rem;cursor:pointer}
+
+/* FORMULARIO VISTA */
+.form-view{background:var(--cream);color:var(--navy);flex:1;overflow-y:auto;flex-direction:column}
+.form-view.active{display:flex}
+.form-hdr{background:var(--navy);padding:2rem 1.5rem 2.5rem;text-align:center;position:relative}
+.form-hdr::before{content:'';position:absolute;left:0;top:0;width:5px;height:100%;background:var(--gold)}
+.form-hdr-brand{font-size:.72rem;font-weight:600;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.65rem}
+.form-hdr-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:600;color:var(--white);line-height:1.1;margin-bottom:.65rem}
+.gold-line{width:44px;height:2px;background:var(--gold);margin:1rem auto}
+.form-hdr-sub{font-size:.9rem;color:var(--gray);font-style:italic;max-width:440px;margin:0 auto;line-height:1.5}
+.form-intro{background:var(--white);border-left:4px solid var(--gold);margin:1.75rem auto;max-width:700px;padding:1.1rem 1.4rem;border-radius:0 8px 8px 0;font-size:.9rem;line-height:1.6;color:#334}
+.form-wrap{max-width:700px;margin:0 auto 3.5rem;padding:0 1rem}
+.form-sec{background:var(--white);border-radius:12px;padding:1.75rem 1.75rem 1.25rem;margin-bottom:1.25rem;box-shadow:0 2px 10px rgba(13,27,62,.07)}
+.form-sec-hdr{display:flex;align-items:center;gap:.7rem;margin-bottom:1.25rem;padding-bottom:.85rem;border-bottom:1px solid #EDE8DE}
+.form-sec-num{width:30px;height:30px;background:var(--navy);color:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0}
+.form-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--navy)}
+.form-field{margin-bottom:1.1rem}
+.form-field label{display:block;font-size:.8rem;font-weight:600;color:var(--navy);letter-spacing:.04em;margin-bottom:.38rem;text-transform:uppercase}
+.form-field label .req{color:var(--gold);margin-left:2px}
+.form-field .hint{font-size:.76rem;color:var(--gray);margin-bottom:.38rem;font-style:italic}
+.form-field input[type="text"],.form-field input[type="email"],.form-field input[type="number"],.form-field select,.form-field textarea{width:100%;padding:.65rem .85rem;border:1.5px solid #D4C4A8;border-radius:8px;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--navy);background:#FAFAF8;transition:border-color .18s,box-shadow .18s}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15);background:var(--white)}
+.form-field textarea{resize:vertical;min-height:85px;line-height:1.5}
+.form-field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230D1B3E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .85rem center;padding-right:2rem}
+.opts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.45rem}
+.opts-grid.col2{grid-template-columns:1fr 1fr}
+.opt-item{display:flex;align-items:center;gap:.5rem;padding:.55rem .75rem;border:1.5px solid #D4C4A8;border-radius:8px;cursor:pointer;font-size:.86rem;background:#FAFAF8;transition:border-color .15s,background .15s}
+.opt-item:hover{border-color:var(--gold);background:#FFFDF5}
+.opt-item input{width:15px;height:15px;accent-color:var(--gold);flex-shrink:0;padding:0;border:none;background:none;box-shadow:none}
+.opt-item:has(input:checked){border-color:var(--gold);background:#FFFBF0}
+.scale-wrap{display:flex;gap:.35rem;align-items:center;flex-wrap:wrap}
+.scale-txt{font-size:.73rem;color:var(--gray);flex-shrink:0}
+.scale-opts{display:flex;gap:.25rem}
+.scale-opts label{display:flex;flex-direction:column;align-items:center;gap:.15rem;cursor:pointer;font-size:.73rem;color:var(--gray);font-weight:400}
+.scale-opts input[type="radio"]{width:34px;height:34px;accent-color:var(--gold);cursor:pointer;padding:0;border:none;background:none;box-shadow:none}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.submit-wrap{text-align:center;padding:.85rem 0 1.75rem}
+.btn-submit{background:var(--navy);color:var(--gold);font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.95rem 2.75rem;border:none;border-radius:8px;cursor:pointer;transition:background .2s}
+.btn-submit:hover{background:var(--navy2)}
+.form-footer{text-align:center;padding:1.25rem;font-size:.76rem;color:var(--gray);border-top:1px solid #DDD8CE}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--navy);border:1px solid var(--border);border-radius:12px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;padding:1.6rem}
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;margin-bottom:1.1rem;color:var(--gold-lt)}
+.modal-field{margin-bottom:.9rem}
+.modal-field label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:.35rem}
+.modal-field input,.modal-field textarea,.modal-field select{width:100%;padding:.62rem .82rem;background:var(--input-bg);border:1.5px solid var(--border);border-radius:7px;color:var(--white);font-size:.86rem;font-family:'Inter',sans-serif;transition:border-color .15s}
+.modal-field input:focus,.modal-field textarea:focus,.modal-field select:focus{outline:none;border-color:var(--gold)}
+.modal-field textarea{resize:vertical;min-height:75px;line-height:1.5}
+.modal-field input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.5);cursor:pointer}
+.modal-field select option{background:var(--navy)}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.modal-actions{display:flex;gap:.55rem;justify-content:flex-end;margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--border)}
+.btn-cancel{background:transparent;border:1px solid var(--border);color:var(--gray);padding:.5rem 1rem;border-radius:6px;font-size:.83rem;cursor:pointer}
+.btn-cancel:hover{border-color:var(--gray)}
+.btn-save{background:var(--gold);border:none;color:var(--navy);padding:.5rem 1.3rem;border-radius:6px;font-size:.83rem;font-weight:700;cursor:pointer}
+.btn-save:hover{background:var(--gold-lt)}
+.btn-save-purple{background:var(--purple);border:none;color:var(--white);padding:.5rem 1.3rem;border-radius:6px;font-size:.83rem;font-weight:700;cursor:pointer}
+.btn-save-purple:hover{background:#9370c0}
+#photoInput{display:none}
+
+@media(max-width:640px){
+  .sidebar{width:210px}
+  .main{padding:1rem}
+  .modal-row,.field-row,.prof-grid,.opts-grid.col2,.pend-grid{grid-template-columns:1fr}
+  .form-sec{padding:1.25rem 1rem 1rem}
+}
+</style>
 </head>
 <body>
 
-<div class="bg-fx">
-  <div class="bg-fx__grid"></div>
-  <div class="bg-fx__orb bg-fx__orb--1"></div>
-  <div class="bg-fx__orb bg-fx__orb--2"></div>
-  <div class="bg-fx__orb bg-fx__orb--3"></div>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-brand">psi.catalinabarrio</div>
+    <div class="login-title">Bienvenida, Cata</div>
+    <div class="login-sub">Ingresá tu contraseña para acceder a la plataforma</div>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="loginInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Ingresar a la plataforma</button>
+    <div class="login-error" id="loginError">Contraseña incorrecta</div>
+    <hr class="login-divider">
+    <div class="login-form-txt">¿Sos jugadora? Completá tu formulario acá</div>
+    <button class="btn-go-form" onclick="goToForm()">📋 Ir al formulario de inicio</button>
+  </div>
 </div>
 
-
-<nav class="nav">
-  <div class="nav__mark">Catalina <span>Barrio</span></div>
-  <div class="nav__right">
-    <a href="#contacto" class="nav__cta">Contacto</a>
-    <button class="nav__burger" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+<!-- TOPBAR -->
+<div class="topbar" id="mainTopbar" style="display:none">
+  <div class="topbar-left">
+    <div class="topbar-dot"></div>
+    <span class="topbar-brand">psi.catalinabarrio</span>
+    <span class="topbar-sep">·</span>
+    <span class="topbar-title" id="topbarTitle">Sistema de gestión</span>
   </div>
-</nav>
-
-<div class="menu-overlay" id="menu-overlay">
-  <ul class="menu-overlay__list">
-    <li><a href="#jugadoras" class="menu-link">Jugadoras</a></li>
-    <li><a href="#testimonios" class="menu-link">Testimonios</a></li>
-    <li><a href="#sobre-mi" class="menu-link">Sobre mí</a></li>
-    <li><a href="#camisetas" class="menu-link">Gratitud en la cancha</a></li>
-    <li><a href="#programas" class="menu-link">Programas</a></li>
-    <li><a href="#asesorias" class="menu-link">Asesorías y charlas</a></li>
-    <li><a href="#contacto" class="menu-link">Contacto</a></li>
-  </ul>
+  <div class="topbar-nav">
+    <button class="nav-btn active" onclick="showView('admin')">🗂 Plataforma</button>
+    <button class="nav-btn" onclick="showView('form')">📋 Formulario</button>
+  </div>
+  <div class="topbar-actions" id="adminActions">
+    <button class="btn-top btn-purple" onclick="openMySessionModal()">+ Mi sesión</button>
+    <button class="btn-top btn-gold" onclick="openNewPlayerModal()">+ Jugadora</button>
+    <button class="topbar-logout" onclick="doLogout()">Salir</button>
+  </div>
 </div>
 
-<!-- 1. HERO -->
-<header class="hero">
-  <div class="hero__shield" id="hero-shield"></div>
-  <div class="container hero__grid">
-    <div class="hero__content">
-      <p class="hero__eyebrow">Psicóloga</p>
-      <h1 class="hero__title">Catalina <span class="accent">Barrio</span></h1>
-      <p class="hero__tagline">Tu mente, tu ventaja competitiva.</p>
-      <p class="hero__sub">Psicóloga deportiva de fútbol femenino.</p>
+<!-- VISTA ADMIN -->
+<div class="view active" id="viewAdmin">
+  <div class="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="searchInput" placeholder="Buscar jugadora..." oninput="filterPlayers()">
     </div>
-    <div class="hero__photo">
-      <div class="hero__photo-frame">
-        <img src="hero-cata-nueva.png" alt="Lic. Catalina Barrio">
-      </div>
-      <a href="#programas" class="btn hero__photo-cta">Conocer los programas</a>
-    </div>
-  </div>
-</header>
-
-<!-- 2. CARRUSEL DE JUGADORAS -->
-<section id="jugadoras">
-  <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Confían en el proceso</p>
-      <h2 class="section-title">Jugadoras que potencian su mente</h2>
-    </div>
-    <div class="carousel-wrap reveal">
-      <div class="carousel" id="carousel-jugadoras"></div>
-      <div class="carousel-nav">
-        <button id="prev-jugadora" aria-label="Anterior">&#8592;</button>
-        <button id="next-jugadora" aria-label="Siguiente">&#8594;</button>
+    <div class="sidebar-label">Mis sesiones</div>
+    <div style="padding:0 .45rem .2rem">
+      <div class="sidebar-item" id="mySessionsItem" onclick="selectMySessions()">
+        <div class="s-avatar purple-av">🧠</div>
+        <div class="s-info">
+          <div class="s-name">Mis sesiones</div>
+          <div class="s-meta">Supervisión · Formación</div>
+        </div>
+        <div class="s-count purple-c" id="mySessionsCount">0</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- 3. TESTIMONIOS -->
-<section id="testimonios" style="background:var(--bg-panel-2)">
-  <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Lo que se trabajó</p>
-      <h2 class="section-title">Testimonios reales</h2>
-    </div>
-    <div class="carousel-wrap reveal">
-      <div class="testimonios-track" id="grid-testimonios"></div>
-      <div class="carousel-nav">
-        <button id="prev-testimonio" aria-label="Anterior">&#8592;</button>
-        <button id="next-testimonio" aria-label="Siguiente">&#8594;</button>
-      </div>
+    <div class="sidebar-label">Pendientes <span class="pending-badge-dot" id="pendingDot"></span></div>
+    <div style="padding:0 .45rem .2rem" id="pendingList"></div>
+
+    <div class="sidebar-label"><span>Punto de Quiebre</span><span class="sidebar-label-count" id="cntPDQ">0</span></div>
+    <div class="sidebar-sublabel" id="sublabelPDQ_cata" onclick="unlockCata('PDQ_cata')"><span>▸ Cata</span><span class="sub-right"><span class="sub-count" id="cntPDQ_cata">0</span><span class="lock-icon">🔒</span></span></div>
+    <div style="padding:0 .45rem .2rem;display:none" id="listPDQ_cata"></div>
+    <div class="sidebar-sublabel" id="sublabelPDQ_psico"><span>▸ Nueva Psico</span><span class="sub-right"><span class="sub-count" id="cntPDQ_psico">0</span></span></div>
+    <div style="padding:0 .45rem .2rem" id="listPDQ_psico"></div>
+
+    <div class="sidebar-label"><span>Sin Vuelta Atrás</span><span class="sidebar-label-count" id="cntSVA">0</span></div>
+    <div class="sidebar-sublabel" id="sublabelSVA_cata" onclick="unlockCata('SVA_cata')"><span>▸ Cata</span><span class="sub-right"><span class="sub-count" id="cntSVA_cata">0</span><span class="lock-icon">🔒</span></span></div>
+    <div style="padding:0 .45rem .2rem;display:none" id="listSVA_cata"></div>
+    <div class="sidebar-sublabel" id="sublabelSVA_psico"><span>▸ Nueva Psico</span><span class="sub-right"><span class="sub-count" id="cntSVA_psico">0</span></span></div>
+    <div style="padding:0 .45rem .2rem" id="listSVA_psico"></div>
+
+    <div class="sidebar-label"><span>Sesiones particulares Cata</span><span class="sub-right"><span class="sidebar-label-count" id="cntPART">0</span><span style="cursor:pointer;font-size:.8rem" onclick="unlockCata('PART')">🔒</span></span></div>
+    <div style="padding:0 .45rem .2rem;display:none" id="listPART"></div>
+
+    <div class="sidebar-label"><span>Mente Fría</span><span class="sidebar-label-count" id="cntMF">0</span></div>
+    <div class="sidebar-sublabel" id="sublabelMF_cata" onclick="unlockCata('MF_cata')"><span>▸ Cata</span><span class="sub-right"><span class="sub-count" id="cntMF_cata">0</span><span class="lock-icon">🔒</span></span></div>
+    <div style="padding:0 .45rem .2rem;display:none" id="listMF_cata"></div>
+    <div class="sidebar-sublabel" id="sublabelMF_psico"><span>▸ Nueva Psico</span><span class="sub-right"><span class="sub-count" id="cntMF_psico">0</span></span></div>
+    <div style="padding:0 .45rem .2rem" id="listMF_psico"></div>
+
+    <div class="sidebar-label" id="labelSinPrograma" style="display:none">Sin programa</div>
+    <div style="padding:0 .45rem .45rem" id="listSIN"></div>
+  </div>
+  <div class="main" id="mainPanel">
+    <div class="empty-state">
+      <div class="empty-icon">✦</div>
+      <h3>Seleccioná una jugadora</h3>
+      <p>Elegí una jugadora del panel o usá el formulario para que completen sus datos.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 4. SOBRE MÍ -->
-<section id="sobre-mi">
-  <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Conocé más</p>
-      <h2 class="section-title">Quién soy</h2>
+<!-- VISTA FORMULARIO -->
+<div class="view" id="viewForm" style="flex-direction:column">
+  <div class="form-view active">
+    <div class="form-hdr" id="formHdr">
+      <div class="form-hdr-brand">psi.catalinabarrio</div>
+      <h1 class="form-hdr-title">Formulario de inicio</h1>
+      <div class="gold-line"></div>
+      <p class="form-hdr-sub">Antes de tu primera sesión, completá este formulario para que pueda conocerte y preparar nuestro trabajo juntas.</p>
     </div>
-    <div class="sobre-mi reveal">
-      <div class="sobre-mi__photo">
-        <div class="sobre-mi__photo-frame">
-          <img src="quiensoy.png" alt="Lic. Catalina Barrio">
+    <div class="form-intro" id="formIntro"><strong>¿Para qué sirve?</strong> Toda la información que compartís es confidencial y queda entre vos y yo. Me ayuda a entender desde dónde arrancás, qué te pesa y qué querés trabajar.</div>
+    <form class="form-wrap" id="intakeForm" onsubmit="handleFormSubmit(event)">
+
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">1</div><div class="form-sec-title">Datos personales</div></div>
+        <div class="field-row">
+          <div class="form-field"><label>Nombre completo <span class="req">*</span></label><input type="text" name="nombre" required placeholder="Tu nombre y apellido"></div>
+          <div class="form-field"><label>Edad <span class="req">*</span></label><input type="number" name="edad" required min="14" max="50" placeholder="Ej: 23"></div>
+        </div>
+        <div class="field-row">
+          <div class="form-field"><label>Email <span class="req">*</span></label><input type="email" name="email" required placeholder="tu@email.com"></div>
+          <div class="form-field"><label>WhatsApp <span class="req">*</span></label><input type="text" name="wa" required placeholder="+54 9 11 0000 0000"></div>
+        </div>
+        <div class="field-row">
+          <div class="form-field"><label>País de residencia <span class="req">*</span></label><input type="text" name="pais_residencia" required placeholder="Ej: Argentina"></div>
+          <div class="form-field"><label>Ciudad <span class="req">*</span></label><input type="text" name="ciudad" required placeholder="Ej: Buenos Aires"></div>
+        </div>
+        <div class="field-row">
+          <div class="form-field"><label>Fecha de cumpleaños <span class="req">*</span></label><input type="date" name="fecha_cumple" required></div>
+          <div class="form-field"><label>Instagram <span class="req">*</span></label><input type="text" name="instagram" required placeholder="@tunombre"></div>
+        </div>
+        <div class="field-row">
+          <div class="form-field"><label>Tu foto <span class="req">*</span></label>
+            <input type="file" name="foto_file" id="fotoInput" accept="image/*" required onchange="previewFoto(event)" style="border:1.5px solid #D4C4A8;border-radius:8px;padding:.5rem .85rem;width:100%;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--navy);background:#FAFAF8">
+            <div id="fotoPreview" style="display:none;margin-top:.5rem">
+              <img id="fotoImg" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)">
+            </div>
+            <input type="hidden" name="foto_data" id="fotoData">
+          </div>
         </div>
       </div>
-      <div class="sobre-mi__text">
 
-        <div class="sm-contact-row" id="sm-contacto"></div>
-
-        <div class="row-clubes-grandes" id="row-clubes-grandes"></div>
-
-        <div class="sm-three-col">
-          <div class="sm-block">
-            <h3 class="sm-block__title">Estudios</h3>
-            <ul class="sm-lista sm-lista--colapsable" id="sm-estudios"></ul>
-            <button class="ver-todas" data-target="sm-estudios">Ver todas</button>
-          </div>
-
-          <div class="sm-block">
-            <h3 class="sm-block__title">Certificaciones</h3>
-            <ul class="sm-lista sm-lista--colapsable" id="sm-certificaciones"></ul>
-            <button class="ver-todas" data-target="sm-certificaciones">Ver todas</button>
-          </div>
-
-          <div class="sm-block">
-            <h3 class="sm-block__title">Experiencia laboral</h3>
-            <ul class="sm-lista sm-lista--colapsable" id="sm-experiencia"></ul>
-            <button class="ver-todas" data-target="sm-experiencia">Ver todas</button>
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">2</div><div class="form-sec-title">Tu situación deportiva</div></div>
+        <div class="field-row">
+          <div class="form-field"><label>Club actual <span class="req">*</span></label><input type="text" name="club" required placeholder="Nombre del club"></div>
+          <div class="form-field"><label>País del club <span class="req">*</span></label><input type="text" name="pais_club" required placeholder="Ej: Argentina"></div>
+        </div>
+        <div class="form-field"><label>Puesto <span class="req">*</span></label>
+          <div class="opts-grid">
+            <label class="opt-item"><input type="radio" name="puesto" value="Portera" required> Portera</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Defensora central"> Defensora central</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Lateral"> Lateral</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Volante defensiva"> Volante defensiva</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Mediocampista"> Mediocampista</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Volante ofensiva"> Volante ofensiva</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Extrema"> Extrema</label>
+            <label class="opt-item"><input type="radio" name="puesto" value="Delantera"> Delantera</label>
           </div>
         </div>
+        <div class="form-field"><label>Situación actual <span class="req">*</span></label>
+          <div class="opts-grid col2">
+            <label class="opt-item"><input type="radio" name="situacion" value="Titular" required> Titular</label>
+            <label class="opt-item"><input type="radio" name="situacion" value="Suplente"> Suplente</label>
+            <label class="opt-item"><input type="radio" name="situacion" value="Rotando"> Rotando</label>
+            <label class="opt-item"><input type="radio" name="situacion" value="No citada"> No citada</label>
+          </div>
+        </div>
+        <div class="form-field"><label>¿Tenés alguna lesión? <span class="req">*</span></label>
+          <div class="opts-grid col2">
+            <label class="opt-item"><input type="radio" name="lesion" value="No" required> No</label>
+            <label class="opt-item"><input type="radio" name="lesion" value="Sí, en recuperación"> Sí, en recuperación</label>
+            <label class="opt-item"><input type="radio" name="lesion" value="Sí, sin poder entrenar"> Sí, sin poder entrenar</label>
+            <label class="opt-item"><input type="radio" name="lesion" value="Tuve lesión reciente"> Tuve lesión reciente</label>
+          </div>
+        </div>
+        <div class="form-field"><label>Si hay lesión, contame brevemente</label><textarea name="detalle_lesion" placeholder="Opcional"></textarea></div>
+        <div class="form-field"><label>Historial de lesiones <span class="req">*</span></label><div class="hint">¿Tuviste lesiones importantes en el pasado? ¿Cuáles, cuándo, cómo fue la recuperación?</div><textarea name="historial_lesiones" required placeholder="Ej: Rotura de LCA en 2022, tardé 8 meses en volver. Antes tuve un esguince en el tobillo..."></textarea></div>
+      </div>
 
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">3</div><div class="form-sec-title">Tu carrera deportiva</div></div>
+        <div class="form-field"><label>¿Desde qué edad jugás? <span class="req">*</span></label><input type="number" name="edad_inicio" required min="3" max="30" placeholder="Ej: 8"></div>
+        <div class="form-field"><label>Contame tu recorrido hasta llegar al club actual <span class="req">*</span></label><div class="hint">Clubes anteriores, categorías, momentos clave</div><textarea name="trayectoria" required placeholder="Ej: Empecé en las inferiores de X a los 12 años..."></textarea></div>
+        <div class="form-field"><label>¿Cómo llegaste a este club? <span class="req">*</span></label><textarea name="como_llego_club" required placeholder="¿Te buscaron, pediste la prueba, te recomendaron?"></textarea></div>
+      </div>
+
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">4</div><div class="form-sec-title">Tu entorno y red de apoyo</div></div>
+        <div class="form-field"><label>¿Tu familia apoya tu carrera? <span class="req">*</span></label>
+          <div class="opts-grid col2">
+            <label class="opt-item"><input type="radio" name="apoyo_familia" value="Sí, completamente" required> Sí, completamente</label>
+            <label class="opt-item"><input type="radio" name="apoyo_familia" value="Sí, con sus limitaciones"> Sí, con sus limitaciones</label>
+            <label class="opt-item"><input type="radio" name="apoyo_familia" value="Regular, hay tensiones"> Regular, hay tensiones</label>
+            <label class="opt-item"><input type="radio" name="apoyo_familia" value="No, no me apoyan"> No, no me apoyan</label>
+          </div>
+        </div>
+        <div class="form-field"><label>Contame cómo es el vínculo con tu familia en relación a tu carrera <span class="req">*</span></label><textarea name="vinculo_familia" required placeholder="¿Están presentes? ¿Generan presión? ¿Son un sostén?"></textarea></div>
+      </div>
+
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">5</div><div class="form-sec-title">Tu estado mental hoy</div></div>
+        <div class="form-field"><label>¿Qué es lo que más te pesa hoy? <span class="req">*</span></label><div class="hint">Puede ser algo del fútbol, de tu vida, o las dos cosas</div><textarea name="lo_que_pesa" required placeholder="Escribí con honestidad. Es confidencial."></textarea></div>
+        <div class="form-field"><label>¿Qué factores influyen en tu rendimiento? <span class="req">*</span></label>
+          <div class="hint">Marcá todos los que apliquen</div>
+          <div class="opts-grid">
+            <label class="opt-item"><input type="checkbox" name="factores" value="Opinión del DT"> Opinión del DT</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Relación con compañeras"> Relación con compañeras</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Miedo a errar"> Miedo a errar</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Presión familiar"> Presión familiar</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Estado físico"> Estado físico</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Falta de confianza"> Falta de confianza</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Presión del partido"> Presión del partido</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Vida personal"> Vida personal</label>
+            <label class="opt-item"><input type="checkbox" name="factores" value="Otro"> Otro</label>
+          </div>
+          <div class="form-field" id="factoresOtroWrap" style="display:none;margin-top:.5rem">
+            <input type="text" name="factores_otro" placeholder="¿Cuál?" style="border:1.5px solid #D4C4A8;border-radius:8px;padding:.6rem .85rem;width:100%;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--navy);background:#FAFAF8">
+          </div>
+        </div>
+        <div class="form-field"><label>¿Cómo respondés bajo presión? <span class="req">*</span></label><textarea name="respuesta_presion" required placeholder="Describí cómo te comportás en los momentos más difíciles"></textarea></div>
+        <div class="form-field"><label>¿Cómo te llevás con los errores? <span class="req">*</span></label>
+          <div class="opts-grid col2">
+            <label class="opt-item"><input type="radio" name="gestion_errores" value="Los dejo ir rápido" required> Los dejo ir rápido</label>
+            <label class="opt-item"><input type="radio" name="gestion_errores" value="Me cuesta pero lo manejo"> Me cuesta, lo manejo</label>
+            <label class="opt-item"><input type="radio" name="gestion_errores" value="Me afectan bastante"> Me afectan bastante</label>
+            <label class="opt-item"><input type="radio" name="gestion_errores" value="Me paralizan"> Me paralizan</label>
+          </div>
+        </div>
+        <div class="form-field"><label>Del 1 al 10, ¿cómo calificarías tu confianza hoy? <span class="req">*</span></label>
+          <div class="scale-wrap">
+            <span class="scale-txt">Muy baja</span>
+            <div class="scale-opts">
+              <label><input type="radio" name="confianza_hoy" value="1" required>1</label>
+              <label><input type="radio" name="confianza_hoy" value="2">2</label>
+              <label><input type="radio" name="confianza_hoy" value="3">3</label>
+              <label><input type="radio" name="confianza_hoy" value="4">4</label>
+              <label><input type="radio" name="confianza_hoy" value="5">5</label>
+              <label><input type="radio" name="confianza_hoy" value="6">6</label>
+              <label><input type="radio" name="confianza_hoy" value="7">7</label>
+              <label><input type="radio" name="confianza_hoy" value="8">8</label>
+              <label><input type="radio" name="confianza_hoy" value="9">9</label>
+              <label><input type="radio" name="confianza_hoy" value="10">10</label>
+            </div>
+            <span class="scale-txt">Muy alta</span>
+          </div>
+        </div>
+        <div class="form-field"><label>Del 1 al 10, ¿cómo calificarías tu gestión de emociones hoy? <span class="req">*</span></label>
+          <div class="scale-wrap">
+            <span class="scale-txt">Muy baja</span>
+            <div class="scale-opts">
+              <label><input type="radio" name="gestion_emociones" value="1" required>1</label>
+              <label><input type="radio" name="gestion_emociones" value="2">2</label>
+              <label><input type="radio" name="gestion_emociones" value="3">3</label>
+              <label><input type="radio" name="gestion_emociones" value="4">4</label>
+              <label><input type="radio" name="gestion_emociones" value="5">5</label>
+              <label><input type="radio" name="gestion_emociones" value="6">6</label>
+              <label><input type="radio" name="gestion_emociones" value="7">7</label>
+              <label><input type="radio" name="gestion_emociones" value="8">8</label>
+              <label><input type="radio" name="gestion_emociones" value="9">9</label>
+              <label><input type="radio" name="gestion_emociones" value="10">10</label>
+            </div>
+            <span class="scale-txt">Muy alta</span>
+          </div>
+        </div>
+        <div class="form-field"><label>Del 1 al 10, ¿cómo está tu motivación hoy? <span class="req">*</span></label>
+          <div class="scale-wrap">
+            <span class="scale-txt">Muy baja</span>
+            <div class="scale-opts">
+              <label><input type="radio" name="motivacion_hoy" value="1" required>1</label>
+              <label><input type="radio" name="motivacion_hoy" value="2">2</label>
+              <label><input type="radio" name="motivacion_hoy" value="3">3</label>
+              <label><input type="radio" name="motivacion_hoy" value="4">4</label>
+              <label><input type="radio" name="motivacion_hoy" value="5">5</label>
+              <label><input type="radio" name="motivacion_hoy" value="6">6</label>
+              <label><input type="radio" name="motivacion_hoy" value="7">7</label>
+              <label><input type="radio" name="motivacion_hoy" value="8">8</label>
+              <label><input type="radio" name="motivacion_hoy" value="9">9</label>
+              <label><input type="radio" name="motivacion_hoy" value="10">10</label>
+            </div>
+            <span class="scale-txt">Muy alta</span>
+          </div>
+        </div>
+        <div class="form-field"><label>Del 1 al 10, ¿cómo calificarías la presión que sentís hoy? <span class="req">*</span></label>
+          <div class="scale-wrap">
+            <span class="scale-txt">Muy baja</span>
+            <div class="scale-opts">
+              <label><input type="radio" name="presion_hoy" value="1" required>1</label>
+              <label><input type="radio" name="presion_hoy" value="2">2</label>
+              <label><input type="radio" name="presion_hoy" value="3">3</label>
+              <label><input type="radio" name="presion_hoy" value="4">4</label>
+              <label><input type="radio" name="presion_hoy" value="5">5</label>
+              <label><input type="radio" name="presion_hoy" value="6">6</label>
+              <label><input type="radio" name="presion_hoy" value="7">7</label>
+              <label><input type="radio" name="presion_hoy" value="8">8</label>
+              <label><input type="radio" name="presion_hoy" value="9">9</label>
+              <label><input type="radio" name="presion_hoy" value="10">10</label>
+            </div>
+            <span class="scale-txt">Muy alta</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">6</div><div class="form-sec-title">Lo que querés trabajar</div></div>
+        <div class="form-field"><label>¿Qué querés trabajar? <span class="req">*</span></label><div class="hint">¿Qué te trajo acá? ¿Qué querés que cambie?</div><textarea name="que_quiere_trabajar" required placeholder="Describí qué te llevó a buscar apoyo mental"></textarea></div>
+        <div class="form-field"><label>¿Por qué ahora? <span class="req">*</span></label><textarea name="por_que_ahora" required placeholder="¿Qué pasó que te hizo dar este paso?"></textarea></div>
+        <div class="form-field"><label>¿Qué sería una señal de que el proceso funcionó? <span class="req">*</span></label><textarea name="senial_exito" required placeholder="Ej: jugar libre, no depender de la mirada del DT..."></textarea></div>
+        <div class="form-field"><label>¿Hay algo más que quieras que sepa?</label><textarea name="comentario_libre" placeholder="Cualquier cosa que sientas importante compartir"></textarea></div>
+      </div>
+
+      <div class="submit-wrap">
+        <button type="submit" class="btn-submit">Enviar formulario</button>
+      </div>
+    </form>
+    <div class="form-footer">psi.catalinabarrio · Toda la información es confidencial</div>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="modal-overlay" id="playerModal">
+  <div class="modal">
+    <div class="modal-title" id="playerModalTitle">Nueva jugadora</div>
+    <div class="modal-field"><label>Nombre completo *</label><input type="text" id="pNombre" placeholder="Nombre y apellido"></div>
+    <div class="modal-row">
+      <div class="modal-field"><label>Club</label><input type="text" id="pClub"></div>
+      <div class="modal-field"><label>País del club</label><input type="text" id="pPais"></div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field"><label>Puesto</label><input type="text" id="pPuesto"></div>
+      <div class="modal-field"><label>Programa</label>
+        <select id="pPrograma">
+          <option value="">Sin asignar</option>
+          <optgroup label="Punto de Quiebre">
+            <option>Punto de Quiebre - Cata</option>
+            <option>Punto de Quiebre - Nueva Psico</option>
+          </optgroup>
+          <optgroup label="Sin Vuelta Atrás">
+            <option>Sin Vuelta Atrás - Cata</option>
+            <option>Sin Vuelta Atrás - Nueva Psico</option>
+          </optgroup>
+          <option>Sesiones particulares Cata</option>
+          <optgroup label="Mente Fría">
+            <option>Mente Fría - Cata</option>
+            <option>Mente Fría - Nueva Psico</option>
+          </optgroup>
+        </select>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 5. GALERÍA DE CAMISETAS -->
-<section id="camisetas" style="background:var(--bg-panel-2)">
-  <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Gratitud en la cancha</p>
-      <h2 class="section-title">¡Gracias!</h2>
-      <p class="lede">Camisetas obsequiadas por las jugadoras en agradecimiento al proceso.</p>
+    <div class="modal-row">
+      <div class="modal-field"><label>Situación</label>
+        <select id="pSituacion"><option value="">—</option><option>Titular</option><option>Suplente</option><option>Rotando</option><option>No citada</option></select>
+      </div>
+      <div class="modal-field"><label>Edad</label><input type="number" id="pEdad" min="14" max="50"></div>
     </div>
-    <div class="carousel-wrap reveal">
-      <div class="camisetas-track" id="track-camisetas"></div>
-      <div class="carousel-nav">
-        <button id="prev-camiseta" aria-label="Anterior">&#8592;</button>
-        <button id="next-camiseta" aria-label="Siguiente">&#8594;</button>
+    <div class="modal-row">
+      <div class="modal-field"><label>Email</label><input type="email" id="pEmail"></div>
+      <div class="modal-field"><label>WhatsApp</label><input type="text" id="pWA"></div>
+    </div>
+    <div class="modal-field"><label>Instagram</label><input type="text" id="pInstagram" placeholder="@tunombre"></div>
+    <hr style="border-color:var(--border);margin:.65rem 0">
+    <div class="modal-field"><label>Lo que más le pesa / Motivo de consulta</label><textarea id="pMotivo"></textarea></div>
+    <div class="modal-field"><label>Factores que influyen en su rendimiento</label><textarea id="pFactores"></textarea></div>
+    <div class="modal-field"><label>Respuesta bajo presión</label><textarea id="pPresion"></textarea></div>
+    <div class="modal-field"><label>Qué quiere trabajar</label><textarea id="pObjetivo"></textarea></div>
+    <div class="modal-field"><label>Vínculo familiar / red de apoyo</label><textarea id="pFamilia"></textarea></div>
+    <div class="modal-field"><label>Trayectoria / cómo llegó al club</label><textarea id="pTrayectoria"></textarea></div>
+    <div class="modal-field"><label>Notas adicionales</label><textarea id="pNotas"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('playerModal')">Cancelar</button>
+      <button class="btn-save" onclick="savePlayer()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sessionModal">
+  <div class="modal">
+    <div class="modal-title" id="sessionModalTitle">Registrar sesión</div>
+    <div class="modal-row">
+      <div class="modal-field"><label>Fecha de esta sesión *</label><input type="date" id="sFecha"></div>
+      <div class="modal-field"><label>Fecha próxima sesión</label><input type="date" id="sProxima"></div>
+    </div>
+    <div class="modal-field"><label>Temas importantes trabajados *</label><textarea id="sTemas" placeholder="¿Qué se habló? Puntos clave de la sesión..."></textarea></div>
+    <div class="modal-field"><label>Acciones pautadas</label><textarea id="sAcciones" placeholder="Tareas, ejercicios, compromisos..."></textarea></div>
+    <div class="modal-field"><label>Tener en cuenta para la próxima sesión</label><textarea id="sProximaNota" placeholder="Temas pendientes, cosas a retomar..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('sessionModal')">Cancelar</button>
+      <button class="btn-save" onclick="saveSession()">Guardar sesión</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="mySessionModal">
+  <div class="modal">
+    <div class="modal-title" style="color:#D1C4E9" id="mySessionModalTitle">Registrar mi sesión</div>
+    <div class="modal-row">
+      <div class="modal-field"><label>Fecha *</label><input type="date" id="msFecha"></div>
+      <div class="modal-field"><label>Tipo</label>
+        <select id="msTipo"><option>Supervisión</option><option>Formación</option><option>Reflexión personal</option><option>Otro</option></select>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 6. PROGRAMAS -->
-<section id="programas">
-  <div class="container">
-    <div class="section-head reveal" style="text-align:center">
-      <p class="eyebrow" style="display:block">Entrenamiento mental</p>
-      <h2 class="section-title">Programas</h2>
+    <div class="modal-field"><label>Temas trabajados *</label><textarea id="msTemas"></textarea></div>
+    <div class="modal-field"><label>Aprendizajes / conclusiones</label><textarea id="msAprendizajes"></textarea></div>
+    <div class="modal-field"><label>Acciones o compromisos propios</label><textarea id="msAcciones"></textarea></div>
+    <div class="modal-field"><label>Notas adicionales</label><textarea id="msNotas"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('mySessionModal')">Cancelar</button>
+      <button class="btn-save-purple" onclick="saveMySession()">Guardar</button>
     </div>
-    <div class="programas-row reveal" id="row-programas"></div>
   </div>
-</section>
+</div>
 
-<!-- 7 y 8. ASESORÍAS + INSTITUCIONES -->
-<section id="asesorias">
-  <div class="container">
-    <div class="asesorias-photo reveal">
-      <img src="asesorias.png" alt="Charla con cuerpo técnico y jugadoras">
-    </div>
-    <div class="panel-dual reveal">
-      <div class="panel">
-        <span class="tag-inline">Cuerpos técnicos</span>
-        <h3>Asesorías especializadas</h3>
-        <p>Charlas de una hora pensadas para entrenadores, dirigentes y cuerpos técnicos, con herramientas psicológicas concretas para la gestión del grupo dentro del día a día del club.</p>
-        <a href="#contacto" class="btn btn--ghost">Consultar</a>
+<input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+
+<script>
+let S={players:[],mySessions:[],pending:[],activePlayerId:null,showMySessions:false,activePendingId:null,editingPlayerId:null,editingSessionId:null,editingMySessionId:null,photoTargetId:null,_approvingId:null};
+function loadS(){try{const s=localStorage.getItem('cata_v4');if(s)S={...S,...JSON.parse(s)}}catch(e){}}
+function saveS(){try{localStorage.setItem('cata_v4',JSON.stringify(S))}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase()}
+function fmtDate(d){if(!d)return'—';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
+function getP(id){return S.players.find(p=>p.id===id)}
+function nextSess(p){if(!p.sessions?.length)return null;return[...p.sessions].sort((a,b)=>new Date(b.fecha)-new Date(a.fecha))[0].proxima||null}
+
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById(v==='admin'?'viewAdmin':'viewForm').classList.add('active');
+  document.querySelectorAll('.nav-btn')[v==='admin'?0:1].classList.add('active');
+  document.getElementById('adminActions').style.display=v==='admin'?'flex':'none';
+  document.getElementById('topbarTitle').textContent=v==='admin'?'Sistema de gestión':'Formulario de intake';
+}
+
+// FORMULARIO SUBMIT
+function handleFormSubmit(e){
+  e.preventDefault();
+  // Validar que al menos un factor esté marcado
+  const factoresChecked = e.target.querySelectorAll('input[name="factores"]:checked');
+  if(factoresChecked.length === 0){
+    alert('Por favor marcá al menos un factor que influya en tu rendimiento.');
+    return;
+  }
+  const fd=new FormData(e.target),obj={};
+  fd.forEach((val,key)=>{obj[key]=obj[key]?(Array.isArray(obj[key])?[...obj[key],val]:[obj[key],val]):val});
+  obj.timestamp = new Date().toISOString();
+
+  const btnSubmit = e.target.querySelector('.btn-submit');
+  btnSubmit.textContent = 'Enviando...';
+  btnSubmit.disabled = true;
+
+  // Guardar en Firebase si está disponible, si no en localStorage
+  const saveData = async () => {
+    const cleanObj = {};
+    Object.keys(obj).forEach(k => {
+      if(k !== 'foto_file') cleanObj[k] = obj[k];
+    });
+    // Si foto_data es muy grande, guardarla aparte y no en Firebase
+    if(cleanObj.foto_data && cleanObj.foto_data.length > 500000) {
+      delete cleanObj.foto_data;
+    }
+    console.log('Intentando guardar en Firebase...', !!window._fbSavePending);
+    if(window._fbSavePending) {
+      const ok = await window._fbSavePending(cleanObj);
+      console.log('Resultado Firebase:', ok);
+      if(ok) return true;
+    } else {
+      console.log('Firebase no disponible, guardando en localStorage');
+    }
+    if(!S.pending)S.pending=[];
+    S.pending.push({id:uid(),...cleanObj});
+    saveS();renderSidebar();
+    return true;
+  };
+
+  saveData().then(() => {
+    e.target.style.display='none';
+    document.getElementById('formIntro').style.display='none';
+    document.getElementById('formHdr').innerHTML=`
+      <div class="form-hdr-brand">psi.catalinabarrio</div>
+      <h1 class="form-hdr-title">¡Gracias!</h1>
+      <div class="gold-line"></div>
+      <p class="form-hdr-sub">Cata va a leer tu formulario antes de la primera sesión. Nos vemos pronto.</p>
+      <p style="color:var(--gold);font-style:italic;margin-top:1rem">— Cata</p>`;
+  });
+}
+
+// SIDEBAR
+function playerItemHTML(p){
+  const isActive = S.activePlayerId===p.id&&!S.showMySessions;
+  return `<div class="sidebar-item${isActive?' active gold-accent':''}" onclick="selectPlayer('${p.id}')">
+    <div class="s-avatar gold-av">${p.photo?`<img src="${p.photo}" alt="">`:`<span>${ini(p.nombre)}</span>`}</div>
+    <div class="s-info"><div class="s-name">${p.nombre}</div><div class="s-meta">${[p.club,p.pais].filter(Boolean).join(' · ')}</div></div>
+    <div class="s-count gold-c">${(p.sessions||[]).length}</div>
+  </div>`;
+}
+
+// Estado de carpetas Cata desbloqueadas en esta sesión
+if(!window.cataUnlocked) window.cataUnlocked = {};
+
+function unlockCata(key){
+  if(window.cataUnlocked[key]){
+    // Ya desbloqueada: toggle visibilidad
+    const list = document.getElementById('list'+key);
+    if(list) list.style.display = list.style.display==='none' ? '' : 'none';
+    return;
+  }
+  const codigo = prompt('Esta carpeta es privada.\nIngresá el código para acceder:');
+  if(codigo === null) return;
+  if(codigo === '2709'){
+    window.cataUnlocked[key] = true;
+    renderSidebar(document.getElementById('searchInput').value);
+  } else {
+    alert('Código incorrecto.');
+  }
+}
+
+function renderSidebar(filter=''){
+  const dot=document.getElementById('pendingDot');
+  document.getElementById('mySessionsCount').textContent=(S.mySessions||[]).length;
+  const msItem=document.getElementById('mySessionsItem');
+  msItem.className='sidebar-item'+(S.showMySessions?' active purple-accent':'');
+  dot.style.display=(S.pending||[]).length?'inline-block':'none';
+
+  const filtered=S.players.filter(p=>p.nombre.toLowerCase().includes(filter.toLowerCase())||(p.club||'').toLowerCase().includes(filter.toLowerCase()));
+
+  // Pendientes
+  document.getElementById('pendingList').innerHTML=(S.pending||[]).map(p=>`
+    <div class="sidebar-item${S.activePendingId===p.id?' active green-accent':''}" onclick="selectPending('${p.id}')">
+      <div class="s-avatar green-av">📋</div>
+      <div class="s-info"><div class="s-name">${p.nombre||'Nueva jugadora'}</div><div class="s-meta" style="color:var(--green)">Pendiente</div></div>
+    </div>`).join('') || '<div style="padding:.3rem .5rem .5rem;font-size:.75rem;color:var(--gray)">—</div>';
+
+  // Agrupar por programa y propietaria
+  const grp = {
+    PDQ_cata:   filtered.filter(p=>p.programa==='Punto de Quiebre - Cata'),
+    PDQ_psico:  filtered.filter(p=>p.programa==='Punto de Quiebre - Nueva Psico'),
+    SVA_cata:   filtered.filter(p=>p.programa==='Sin Vuelta Atrás - Cata'),
+    SVA_psico:  filtered.filter(p=>p.programa==='Sin Vuelta Atrás - Nueva Psico'),
+    PART:       filtered.filter(p=>p.programa==='Sesiones particulares Cata'||p.programa==='Sesiones particulares'),
+    MF_cata:    filtered.filter(p=>p.programa==='Mente Fría - Cata'),
+    MF_psico:   filtered.filter(p=>p.programa==='Mente Fría - Nueva Psico'),
+    sin:        filtered.filter(p=>!p.programa||p.programa===''),
+  };
+
+  const empty = '<div style="padding:.3rem .5rem .5rem;font-size:.75rem;color:var(--gray)">—</div>';
+
+  // Contadores de programa
+  document.getElementById('cntPDQ').textContent = grp.PDQ_cata.length + grp.PDQ_psico.length;
+  document.getElementById('cntSVA').textContent = grp.SVA_cata.length + grp.SVA_psico.length;
+  document.getElementById('cntPART').textContent = grp.PART.length;
+  document.getElementById('cntMF').textContent = grp.MF_cata.length + grp.MF_psico.length;
+
+  // Contadores de subcarpetas
+  document.getElementById('cntPDQ_cata').textContent = grp.PDQ_cata.length;
+  document.getElementById('cntPDQ_psico').textContent = grp.PDQ_psico.length;
+  document.getElementById('cntSVA_cata').textContent = grp.SVA_cata.length;
+  document.getElementById('cntSVA_psico').textContent = grp.SVA_psico.length;
+  document.getElementById('cntMF_cata').textContent = grp.MF_cata.length;
+  document.getElementById('cntMF_psico').textContent = grp.MF_psico.length;
+
+  // Helper para renderizar lista con candado
+  function renderList(key, players){
+    const el = document.getElementById('list'+key);
+    if(!el) return;
+    if(window.cataUnlocked[key]){
+      el.style.display = '';
+      el.innerHTML = players.map(playerItemHTML).join('') || empty;
+      // Actualizar ícono de candado a desbloqueado
+      const sub = document.getElementById('sublabel'+key);
+      if(sub){ const lk=sub.querySelector('.lock-icon'); if(lk) lk.textContent='🔓'; }
+      const partLk = el.previousElementSibling?.querySelector('[onclick*="unlockCata"]');
+      if(partLk) partLk.textContent='🔓';
+    } else {
+      el.style.display = 'none';
+      el.innerHTML = '';
+    }
+  }
+
+  renderList('PDQ_cata', grp.PDQ_cata);
+  renderList('SVA_cata', grp.SVA_cata);
+  renderList('PART', grp.PART);
+  renderList('MF_cata', grp.MF_cata);
+
+  // Subcarpetas Nueva Psico (siempre visibles)
+  document.getElementById('listPDQ_psico').innerHTML = grp.PDQ_psico.map(playerItemHTML).join('') || empty;
+  document.getElementById('listSVA_psico').innerHTML = grp.SVA_psico.map(playerItemHTML).join('') || empty;
+  document.getElementById('listMF_psico').innerHTML = grp.MF_psico.map(playerItemHTML).join('') || empty;
+
+  const sinProg = grp.sin;
+  document.getElementById('labelSinPrograma').style.display = sinProg.length ? 'flex' : 'none';
+  document.getElementById('listSIN').innerHTML = sinProg.map(playerItemHTML).join('');
+}
+
+function filterPlayers(){renderSidebar(document.getElementById('searchInput').value)}
+
+function selectPlayer(id){S.activePlayerId=id;S.showMySessions=false;S.activePendingId=null;saveS();renderSidebar(document.getElementById('searchInput').value);renderMain()}
+function selectMySessions(){S.showMySessions=true;S.activePlayerId=null;S.activePendingId=null;renderSidebar();renderMain()}
+function selectPending(id){S.activePendingId=id;S.activePlayerId=null;S.showMySessions=false;renderSidebar();renderPendingDetail(id)}
+
+// PENDING DETAIL
+function renderPendingDetail(id){
+  const panel=document.getElementById('mainPanel');
+  const p=(S.pending||[]).find(x=>x.id===id);
+  if(!p){renderMain();return}
+  const basics=[['Club',p.club],['País del club',p.pais_club],['Puesto',p.puesto],['Situación',p.situacion],['Edad',p.edad],['Cumpleaños',p.fecha_cumple],['Email',p.email],['WhatsApp',p.wa],['Lesión',p.lesion]].filter(([,v])=>v);
+  const longs=[['Trayectoria',p.trayectoria],['Cómo llegó al club',p.como_llego_club],['Apoyo familiar',p.apoyo_familia],['Vínculo familiar',p.vinculo_familia],['Lo que más le pesa',p.lo_que_pesa],['Factores que influyen',Array.isArray(p.factores)?p.factores.join(', ')+(p.factores_otro?' (Otro: '+p.factores_otro+')':''):p.factores],['Respuesta bajo presión',p.respuesta_presion],['Gestión de errores',p.gestion_errores],['Confianza (1-10)',p.confianza_hoy],['Gestión de emociones (1-10)',p.gestion_emociones],['Motivación (1-10)',p.motivacion_hoy],['Presión (1-10)',p.presion_hoy],['Qué quiere trabajar',p.que_quiere_trabajar],['Por qué ahora',p.por_que_ahora],['Señal de éxito',p.senial_exito],['Historial de lesiones',p.historial_lesiones],['Comentario libre',p.comentario_libre]].filter(([,v])=>v);
+  panel.innerHTML=`
+    <div class="pl-header">
+      <div class="pl-header-info">
+        <div class="pl-avatar-lg" style="border-color:var(--green);color:var(--green);font-size:1.5rem;cursor:default">📋</div>
+        <div>
+          <div class="pl-name">${p.nombre||'Nueva jugadora'}</div>
+          <div class="pl-sub">Formulario completado · ${new Date(p.timestamp).toLocaleDateString('es-AR')}</div>
+          <div class="pl-tags"><span class="tag green">Pendiente de registro</span></div>
+        </div>
       </div>
-      <div class="panel panel--navy">
-        <span class="tag-inline">Clubes y federaciones</span>
-        <h3>Charlas para instituciones</h3>
-        <p>Capacitaciones y conferencias para clubes de fútbol, federaciones, colegios y universidades interesados en la psicología aplicada al fútbol femenino.</p>
-        <a href="#contacto" class="btn btn--ghost">Consultar</a>
+      <div class="hdr-btns">
+        <button class="btn-approve" onclick="approvePending('${p.id}')">✓ Registrar jugadora</button>
+        <button class="btn-reject" onclick="rejectPending('${p.id}')">Descartar</button>
       </div>
     </div>
-  </div>
-</section>
+    <div class="pend-section">
+      <div class="pend-section-hdr"><span class="pend-section-lbl">📋 Respuestas del formulario</span></div>
+      <div class="pend-body">
+        <div class="pend-grid">${basics.map(([l,v])=>`<div><div class="pend-field-lbl">${l}</div><div class="pend-field-val">${v}</div></div>`).join('')}</div>
+        ${longs.map(([l,v])=>`<div class="pend-full"><div class="pend-field-lbl">${l}</div><div class="pend-field-val" style="margin-top:.15rem">${v}</div></div>`).join('')}
+      </div>
+    </div>`;
+}
 
-<!-- 9. FOOTER / CONTACTO -->
-<footer class="footer" id="contacto">
-  <div class="container">
-    <div class="footer__top">
-      <h2 class="footer__title">Hablemos de lo que necesitás trabajar.</h2>
-      <div class="footer__channels" id="footer-channels"></div>
-    </div>
-    <a href="https://wa.me/541156145694" target="_blank" rel="noopener" class="whatsapp-btn">
-      <svg class="whatsapp-btn__icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path fill="#06070a" d="M16 3C9.4 3 4 8.4 4 15c0 2.2.6 4.3 1.7 6.2L4 29l8-1.7C13.7 28.4 14.8 29 16 29c6.6 0 12-5.4 12-12S22.6 3 16 3zm6.4 15.7c-.3.7-1.5 1.3-2.1 1.4-.5.1-1.1.2-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.7-4.1-4.9-4.3-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.4.8-.4h.6c.2 0 .5-.1.7.5.2.6.8 2.1.9 2.3.1.1.2.3 0 .5-.1.1-.2.4-.3.5-.1.1-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.3 1.2 1.1 2.3 1.4 2.6 1.6.3.1.5.1.7-.1.2-.2.8-1 1-1.3.2-.4.4-.3.7-.2.3.1 1.9.9 2.2 1.1.3.1.5.2.6.4.1.2.1.7-.2 1.4z"/>
-      </svg>
-      Escribime al 11 5614-5694
-    </a>
-    <div class="footer__bottom">
-      <span>Lic. Catalina Barrio — Psicóloga Deportiva</span>
-      <div class="footer__social">
-        <a href="https://instagram.com/lic.catalinabarrio" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
-        <a href="#" aria-label="LinkedIn">in</a>
+function approvePending(id){
+  const p=(S.pending||[]).find(x=>x.id===id);if(!p)return;
+  S.editingPlayerId=null;S._approvingId=id;
+  document.getElementById('playerModalTitle').textContent='Registrar jugadora';
+  document.getElementById('pNombre').value=p.nombre||'';
+  document.getElementById('pClub').value=p.club||'';
+  document.getElementById('pPais').value=p.pais_club||'';
+  document.getElementById('pPuesto').value=p.puesto||'';
+  document.getElementById('pEdad').value=p.edad||'';
+  document.getElementById('pEmail').value=p.email||'';
+  document.getElementById('pWA').value=p.wa||'';
+  document.getElementById('pInstagram').value=p.instagram||'';
+  document.getElementById('pPrograma').value='';
+  document.getElementById('pMotivo').value=p.lo_que_pesa||'';
+  document.getElementById('pFactores').value=Array.isArray(p.factores)?p.factores.join(', ')+(p.factores_otro?' | Otro: '+p.factores_otro:''):(p.factores||'');
+  document.getElementById('pPresion').value=p.respuesta_presion||'';
+  document.getElementById('pObjetivo').value=p.que_quiere_trabajar||'';
+  document.getElementById('pFamilia').value=[p.vinculo_familia,p.apoyo_familia].filter(Boolean).join(' | ')||'';
+  document.getElementById('pTrayectoria').value=[p.trayectoria,p.como_llego_club].filter(Boolean).join('\n\n')||'';
+  document.getElementById('pNotas').value=[p.senial_exito?'Señal de éxito: '+p.senial_exito:'',p.comentario_libre?'Comentario: '+p.comentario_libre:''].filter(Boolean).join('\n')||'';
+  document.getElementById('playerModal').classList.add('open');
+}
+
+function rejectPending(id){
+  if(!confirm('¿Descartar este formulario?'))return;
+  // Borrar de Firebase si está disponible
+  if(window._fbDeletePending) window._fbDeletePending(id);
+  S.pending=(S.pending||[]).filter(x=>x.id!==id);S.activePendingId=null;
+  saveS();renderSidebar();renderMain();
+}
+
+// MAIN
+function renderMain(){
+  const panel=document.getElementById('mainPanel');
+  if(S.showMySessions){renderMySessions(panel);return}
+  if(!S.activePlayerId){panel.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><h3>Seleccioná una jugadora</h3><p>Elegí una jugadora del panel o usá el formulario para que completen sus datos.</p></div>`;return}
+  const player=getP(S.activePlayerId);if(!player)return;
+  const sessions=(player.sessions||[]).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
+  const nextDate=nextSess(player);
+  const pflds=[['Club',player.club],['País',player.pais],['Puesto',player.puesto],['Edad',player.edad],['Situación',player.situacion],['Lesión',player.lesion],['Instagram',player.instagram],['Programa',player.programa],['Email',player.email],['WhatsApp',player.wa]].filter(([,v])=>v);
+  const intake=[
+    ['Lo que más le pesa', player.motivo||player.lo_que_pesa],
+    ['Factores que influyen', player.factores],
+    ['Respuesta bajo presión', player.presion||player.respuesta_presion],
+    ['Gestión de errores', player.gestion_errores],
+    ['Confianza hoy (1-10)', player.confianza_hoy],
+    ['Gestión de emociones (1-10)', player.gestion_emociones],
+    ['Motivación hoy (1-10)', player.motivacion_hoy],
+    ['Presión hoy (1-10)', player.presion_hoy],
+    ['Qué quiere trabajar', player.objetivo||player.que_quiere_trabajar],
+    ['Por qué ahora', player.por_que_ahora],
+    ['Señal de éxito', player.senial_exito],
+    ['Vínculo familiar', player.familia||player.vinculo_familia],
+    ['Apoyo familiar', player.apoyo_familia],
+    ['Trayectoria', player.trayectoria],
+    ['Cómo llegó al club', player.como_llego_club],
+    ['Lesión', player.lesion],
+    ['Detalle lesión', player.detalle_lesion],
+    ['Historial de lesiones', player.historial_lesiones],
+    ['Fecha de cumpleaños', player.fecha_cumple],
+    ['Ciudad', player.ciudad],
+    ['Comentario libre', player.comentario_libre],
+    ['Notas', player.notas],
+  ];
+  panel.innerHTML=`
+    <div class="pl-header">
+      <div class="pl-header-info">
+        <div class="pl-avatar-lg" onclick="triggerPhoto('${player.id}')">
+          ${player.photo?`<img src="${player.photo}" alt="">`:`<span>${ini(player.nombre)}</span>`}
+        </div>
+        <div>
+          <div class="pl-name">${player.nombre}</div>
+          <div class="pl-sub">${[player.puesto,player.club,player.pais].filter(Boolean).join(' · ')}</div>
+          <div class="pl-tags">
+            ${player.programa?`<span class="tag">${player.programa}</span>`:''}
+            ${player.situacion?`<span class="tag">${player.situacion}</span>`:''}
+            <span class="tag">${sessions.length} sesión${sessions.length!==1?'es':''}</span>
+          </div>
+        </div>
+      </div>
+      <div class="hdr-btns">
+        <button class="btn-outline" onclick="openEditPlayerModal('${player.id}')">Editar</button>
+        <button class="btn-outline-gold" onclick="openNewSessionModal('${player.id}')">+ Sesión</button>
+        <button class="btn-outline" style="border-color:var(--danger);color:var(--danger)" onclick="deletePlayer('${player.id}')">Eliminar</button>
       </div>
     </div>
-  </div>
-</footer>
+    ${nextDate?`<div class="next-banner"><div class="dot"></div><span>Próxima sesión: <strong>${fmtDate(nextDate)}</strong></span></div>`:''}
+    <div class="profile-card" id="profileCard">
+      <div class="profile-card-hdr" onclick="toggleProfileCard()">
+        <span class="profile-card-lbl">👤 Perfil de la jugadora</span>
+        <span class="toggle-icon" id="profileToggleIcon">▾</span>
+      </div>
+      <div class="profile-card-body">
+        <div class="prof-photo-row">
+          <div class="prof-photo-box" onclick="triggerPhoto('${player.id}')">
+            ${player.photo?`<img src="${player.photo}" alt="">`:`<div class="prof-photo-empty">📷<br>Agregar foto</div>`}
+          </div>
+          <div class="prof-grid">${pflds.map(([l,v])=>`<div><div class="pf-label">${l}</div><div class="pf-value">${v}</div></div>`).join('')}</div>
+        </div>
+        <hr class="prof-divider">
+        <div class="prof-section-lbl">Datos del intake</div>
+        ${intake.map(([l,v])=>`<div class="prof-full"><div class="pf-label">${l}</div><div class="pf-value ${!v?'empty':''}">${v?v.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="sess-lbl">Sesiones registradas</div>
+    ${sessions.length===0?`<div style="padding:2rem;text-align:center;color:var(--gray);font-size:.86rem">Aún no hay sesiones. Hacé click en "+ Sesión" para agregar la primera.</div>`
+    :sessions.map((s,i)=>`
+    <div class="sess-card" id="sc-${s.id}">
+      <div class="sess-card-hdr" onclick="toggleCard(this)">
+        <div>
+          <div class="sess-num">Sesión ${sessions.length-i}</div>
+          <div class="sess-dates"><span>📅 <span class="dv">${fmtDate(s.fecha)}</span></span>${s.proxima?`<span>→ Próxima: <span class="dv">${fmtDate(s.proxima)}</span></span>`:''}</div>
+        </div>
+        <span class="toggle-icon">▾</span>
+      </div>
+      <div class="sess-body">
+        <div class="sess-field"><div class="sess-field-lbl">Temas importantes</div><div class="sess-field-val ${!s.temas?'empty':''}">${s.temas?s.temas.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>
+        <div class="sess-field"><div class="sess-field-lbl">Acciones pautadas</div><div class="sess-field-val ${!s.acciones?'empty':''}">${s.acciones?s.acciones.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>
+        <div class="sess-field"><div class="sess-field-lbl">Tener en cuenta para la próxima</div><div class="sess-field-val ${!s.proximaNota?'empty':''}">${s.proximaNota?s.proximaNota.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>
+        <div class="sess-actions">
+          <button class="btn-edit-s" onclick="openEditSessionModal('${player.id}','${s.id}')">Editar</button>
+          <button class="btn-del-s" onclick="deleteSession('${player.id}','${s.id}')">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join('')}`;
+}
 
-<script src="data.js"></script>
-<script src="main.js"></script>
+function toggleProfileCard(){
+  const card=document.getElementById('profileCard');
+  const icon=document.getElementById('profileToggleIcon');
+  card.classList.toggle('open');
+  icon.style.transform=card.classList.contains('open')?'rotate(180deg)':'';
+  const body=card.querySelector('.profile-card-body');
+  if(body)body.style.display=card.classList.contains('open')?'block':'none';
+}
+
+function renderMySessions(panel){
+  const sessions=(S.mySessions||[]).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
+  panel.innerHTML=`
+    <div class="pl-header">
+      <div class="pl-header-info">
+        <div class="pl-avatar-lg" style="border-color:var(--purple);color:var(--purple);font-size:1.5rem;cursor:default">🧠</div>
+        <div><div class="pl-name">Mis sesiones</div><div class="pl-sub">Supervisión · Formación · Reflexión personal</div></div>
+      </div>
+      <button class="btn-outline-gold" style="border-color:var(--purple);color:var(--purple)" onclick="openMySessionModal()">+ Sesión</button>
+    </div>
+    <div class="sess-lbl">${sessions.length} sesión${sessions.length!==1?'es':''} registradas</div>
+    ${sessions.length===0?`<div style="padding:2rem;text-align:center;color:var(--gray);font-size:.86rem">Aún no registraste sesiones propias.</div>`
+    :sessions.map((s,i)=>`
+    <div class="sess-card" id="ms-${s.id}">
+      <div class="sess-card-hdr" onclick="toggleCard(this)">
+        <div>
+          <div class="sess-num" style="color:#B39DDB">${s.tipo||'Sesión'} · ${sessions.length-i}</div>
+          <div class="sess-dates"><span>📅 <span class="dv">${fmtDate(s.fecha)}</span></span></div>
+        </div>
+        <span class="toggle-icon">▾</span>
+      </div>
+      <div class="sess-body">
+        <div class="sess-field"><div class="sess-field-lbl" style="color:#B39DDB">Temas trabajados</div><div class="sess-field-val ${!s.temas?'empty':''}">${s.temas?s.temas.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>
+        <div class="sess-field"><div class="sess-field-lbl" style="color:#B39DDB">Aprendizajes</div><div class="sess-field-val ${!s.aprendizajes?'empty':''}">${s.aprendizajes?s.aprendizajes.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>
+        <div class="sess-field"><div class="sess-field-lbl" style="color:#B39DDB">Acciones propias</div><div class="sess-field-val ${!s.acciones?'empty':''}">${s.acciones?s.acciones.replace(/\n/g,'<br>'):'Sin registrar'}</div></div>
+        ${s.notas?`<div class="sess-field"><div class="sess-field-lbl" style="color:#B39DDB">Notas</div><div class="sess-field-val">${s.notas.replace(/\n/g,'<br>')}</div></div>`:''}
+        <div class="sess-actions">
+          <button class="btn-edit-s" onclick="openEditMySession('${s.id}')">Editar</button>
+          <button class="btn-del-s" onclick="deleteMySession('${s.id}')">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join('')}`;
+}
+
+function toggleCard(hdr){
+  const card=hdr.parentElement;card.classList.toggle('open');
+  const body=card.querySelector('.sess-body');
+  if(body)body.style.display=card.classList.contains('open')?'block':'none';
+}
+
+// FOTO
+function triggerPhoto(id){S.photoTargetId=id;document.getElementById('photoInput').click()}
+function handlePhotoUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{const p=getP(S.photoTargetId);if(!p)return;p.photo=ev.target.result;saveS();renderSidebar(document.getElementById('searchInput').value);renderMain()};
+  r.readAsDataURL(file);e.target.value='';
+}
+
+// MODALES JUGADORA
+function clearPlayerModal(){
+  ['pNombre','pClub','pPais','pPuesto','pEmail','pWA','pInstagram','pMotivo','pFactores','pPresion','pObjetivo','pFamilia','pTrayectoria','pNotas'].forEach(id=>document.getElementById(id).value='');
+  ['pPrograma','pSituacion'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pEdad').value='';
+}
+function openNewPlayerModal(){
+  S.editingPlayerId=null;S._approvingId=null;
+  document.getElementById('playerModalTitle').textContent='Nueva jugadora';
+  clearPlayerModal();
+  document.getElementById('playerModal').classList.add('open');
+  setTimeout(()=>document.getElementById('pNombre').focus(),100);
+}
+function openEditPlayerModal(id){
+  const p=getP(id);if(!p)return;S.editingPlayerId=id;
+  document.getElementById('playerModalTitle').textContent='Editar jugadora';
+  document.getElementById('pNombre').value=p.nombre||'';document.getElementById('pClub').value=p.club||'';document.getElementById('pPais').value=p.pais||'';document.getElementById('pPuesto').value=p.puesto||'';document.getElementById('pEdad').value=p.edad||'';document.getElementById('pEmail').value=p.email||'';document.getElementById('pWA').value=p.wa||'';document.getElementById('pInstagram').value=p.instagram||'';document.getElementById('pPrograma').value=p.programa||'';document.getElementById('pSituacion').value=p.situacion||'';document.getElementById('pMotivo').value=p.motivo||'';document.getElementById('pFactores').value=p.factores||'';document.getElementById('pPresion').value=p.presion||'';document.getElementById('pObjetivo').value=p.objetivo||'';document.getElementById('pFamilia').value=p.familia||'';document.getElementById('pTrayectoria').value=p.trayectoria||'';document.getElementById('pNotas').value=p.notas||'';
+  document.getElementById('playerModal').classList.add('open');
+}
+function savePlayer(){
+  const nombre=document.getElementById('pNombre').value.trim();if(!nombre){alert('El nombre es obligatorio');return}
+  const data={nombre,club:document.getElementById('pClub').value.trim(),pais:document.getElementById('pPais').value.trim(),puesto:document.getElementById('pPuesto').value.trim(),edad:document.getElementById('pEdad').value,email:document.getElementById('pEmail').value.trim(),wa:document.getElementById('pWA').value.trim(),instagram:document.getElementById('pInstagram').value.trim(),programa:document.getElementById('pPrograma').value,situacion:document.getElementById('pSituacion').value,motivo:document.getElementById('pMotivo').value.trim(),factores:document.getElementById('pFactores').value.trim(),presion:document.getElementById('pPresion').value.trim(),objetivo:document.getElementById('pObjetivo').value.trim(),familia:document.getElementById('pFamilia').value.trim(),trayectoria:document.getElementById('pTrayectoria').value.trim(),notas:document.getElementById('pNotas').value.trim()};
+  if(S.editingPlayerId){
+    const p=getP(S.editingPlayerId);
+    Object.keys(data).forEach(k=>{
+      if(data[k]!==''&&data[k]!==null&&data[k]!==undefined){p[k]=data[k]}
+      else if(k==='programa'||k==='situacion'){p[k]=data[k]}
+    });
+    if(window._fbSavePlayer) window._fbSavePlayer(p);
+    saveS();
+  } else {
+    let extra = {};
+    if(S._approvingId){
+      const pend=(S.pending||[]).find(x=>x.id===S._approvingId);
+      if(pend){
+        extra={
+          confianza_hoy:pend.confianza_hoy||'',gestion_emociones:pend.gestion_emociones||'',
+          motivacion_hoy:pend.motivacion_hoy||'',presion_hoy:pend.presion_hoy||'',
+          gestion_errores:pend.gestion_errores||'',lesion:pend.lesion||'',
+          detalle_lesion:pend.detalle_lesion||'',edad_inicio:pend.edad_inicio||'',
+          como_llego_club:pend.como_llego_club||'',apoyo_familia:pend.apoyo_familia||'',
+          vinculo_familia:pend.vinculo_familia||'',lo_que_pesa:pend.lo_que_pesa||'',
+          respuesta_presion:pend.respuesta_presion||'',que_quiere_trabajar:pend.que_quiere_trabajar||'',
+          por_que_ahora:pend.por_que_ahora||'',senial_exito:pend.senial_exito||'',
+          comentario_libre:pend.comentario_libre||'',factores_otro:pend.factores_otro||'',
+          pais_residencia:pend.pais_residencia||'',ciudad:pend.ciudad||'',
+          instagram:pend.instagram||'',photo:pend.foto_data||'',
+        };
+      }
+    }
+    const np={id:uid(),sessions:[],createdAt:new Date().toISOString(),...extra,...data};
+    S.players.push(np);S.activePlayerId=np.id;S.showMySessions=false;
+    if(window._fbSavePlayer) window._fbSavePlayer(np);
+    if(S._approvingId){
+      if(window._fbDeletePending) window._fbDeletePending(S._approvingId);
+      S.pending=(S.pending||[]).filter(x=>x.id!==S._approvingId);S._approvingId=null;S.activePendingId=null;
+    }
+    saveS();
+  }
+  closeModal('playerModal');renderSidebar();renderMain();
+}
+
+// MODALES SESIÓN
+function openNewSessionModal(playerId){
+  S.editingSessionId=null;S.activePlayerId=playerId;
+  document.getElementById('sessionModalTitle').textContent='Registrar sesión';
+  document.getElementById('sFecha').value=new Date().toISOString().split('T')[0];
+  ['sProxima','sTemas','sAcciones','sProximaNota'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sessionModal').classList.add('open');
+}
+function openEditSessionModal(playerId,sessionId){
+  const player=getP(playerId);const s=player.sessions.find(x=>x.id===sessionId);if(!s)return;
+  S.editingSessionId=sessionId;S.activePlayerId=playerId;
+  document.getElementById('sessionModalTitle').textContent='Editar sesión';
+  document.getElementById('sFecha').value=s.fecha;document.getElementById('sProxima').value=s.proxima||'';document.getElementById('sTemas').value=s.temas||'';document.getElementById('sAcciones').value=s.acciones||'';document.getElementById('sProximaNota').value=s.proximaNota||'';
+  document.getElementById('sessionModal').classList.add('open');
+}
+function saveSession(){
+  const fecha=document.getElementById('sFecha').value;if(!fecha){alert('La fecha es obligatoria');return}
+  const player=getP(S.activePlayerId);
+  const data={fecha,proxima:document.getElementById('sProxima').value||null,temas:document.getElementById('sTemas').value.trim(),acciones:document.getElementById('sAcciones').value.trim(),proximaNota:document.getElementById('sProximaNota').value.trim(),updatedAt:new Date().toISOString()};
+  if(S.editingSessionId){const idx=player.sessions.findIndex(s=>s.id===S.editingSessionId);player.sessions[idx]={...player.sessions[idx],...data}}
+  else{player.sessions.push({id:uid(),...data})}
+  if(window._fbSavePlayer) window._fbSavePlayer(player);
+  saveS();closeModal('sessionModal');renderMain();
+}
+function deletePlayer(id){
+  const p=getP(id);if(!p)return;
+  if(!confirm(`¿Segura que querés eliminar a ${p.nombre}? Esta acción no se puede deshacer.`))return;
+  S.players=S.players.filter(x=>x.id!==id);
+  if(window._fbDeletePlayer) window._fbDeletePlayer(id);
+  S.activePlayerId=null;
+  saveS();renderSidebar();renderMain();
+}
+
+function deleteSession(playerId,sessionId){
+  if(!confirm('¿Eliminar esta sesión?'))return;
+  const p=getP(playerId);p.sessions=p.sessions.filter(s=>s.id!==sessionId);
+  if(window._fbSavePlayer) window._fbSavePlayer(p);
+  saveS();renderMain();
+}
+
+// MIS SESIONES
+function openMySessionModal(){
+  S.editingMySessionId=null;
+  document.getElementById('mySessionModalTitle').textContent='Registrar mi sesión';
+  document.getElementById('msFecha').value=new Date().toISOString().split('T')[0];
+  document.getElementById('msTipo').value='Supervisión';
+  ['msTemas','msAprendizajes','msAcciones','msNotas'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mySessionModal').classList.add('open');
+}
+function openEditMySession(id){
+  const s=(S.mySessions||[]).find(x=>x.id===id);if(!s)return;
+  S.editingMySessionId=id;
+  document.getElementById('mySessionModalTitle').textContent='Editar mi sesión';
+  document.getElementById('msFecha').value=s.fecha;document.getElementById('msTipo').value=s.tipo||'Supervisión';document.getElementById('msTemas').value=s.temas||'';document.getElementById('msAprendizajes').value=s.aprendizajes||'';document.getElementById('msAcciones').value=s.acciones||'';document.getElementById('msNotas').value=s.notas||'';
+  document.getElementById('mySessionModal').classList.add('open');
+}
+function saveMySession(){
+  const fecha=document.getElementById('msFecha').value;if(!fecha){alert('La fecha es obligatoria');return}
+  if(!S.mySessions)S.mySessions=[];
+  const data={fecha,tipo:document.getElementById('msTipo').value,temas:document.getElementById('msTemas').value.trim(),aprendizajes:document.getElementById('msAprendizajes').value.trim(),acciones:document.getElementById('msAcciones').value.trim(),notas:document.getElementById('msNotas').value.trim()};
+  let sessionObj;
+  if(S.editingMySessionId){
+    const idx=S.mySessions.findIndex(s=>s.id===S.editingMySessionId);
+    S.mySessions[idx]={...S.mySessions[idx],...data};
+    sessionObj=S.mySessions[idx];
+  } else {
+    sessionObj={id:uid(),...data};
+    S.mySessions.push(sessionObj);
+  }
+  if(window._fbSaveMySession) window._fbSaveMySession(sessionObj);
+  saveS();closeModal('mySessionModal');renderSidebar();if(S.showMySessions)renderMain();
+}
+function deleteMySession(id){
+  if(!confirm('¿Eliminar esta sesión?'))return;
+  S.mySessions=(S.mySessions||[]).filter(s=>s.id!==id);
+  if(window._fbDeleteMySession) window._fbDeleteMySession(id);
+  saveS();renderMain();
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+// ── CONTRASEÑA ───────────────────────────────────────────
+const PASS='cata2025';  // Una sola contraseña para entrar
+// Las carpetas de Cata piden 27/09 internamente (ver unlockCata)
+
+function checkAuth(){
+  const ok=sessionStorage.getItem('cata_auth');
+  document.getElementById('loginScreen').style.display=ok?'none':'flex';
+  document.getElementById('mainTopbar').style.display=ok?'flex':'none';
+  document.querySelectorAll('.view').forEach(v=>v.style.removeProperty('display'));
+  if(!ok) document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+}
+
+function doLogin(){
+  const val=document.getElementById('loginInput').value;
+  const err=document.getElementById('loginError');
+  if(val===PASS){
+    sessionStorage.setItem('cata_auth','1');
+    err.style.display='none';
+    document.getElementById('loginInput').value='';
+    checkAuth();
+    loadS();renderSidebar();renderMain();
+  } else {
+    err.style.display='block';
+    document.getElementById('loginInput').select();
+  }
+}
+
+function doLogout(){
+  sessionStorage.removeItem('cata_auth');
+  checkAuth();
+}
+
+function goToForm(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainTopbar').style.display='flex';
+  document.querySelectorAll('.view').forEach(v=>v.style.removeProperty('display'));
+  showView('form');
+  document.getElementById('adminActions').style.display='none';
+  document.querySelector('.topbar-nav').style.display='none';
+  document.getElementById('topbarTitle').textContent='Formulario de inicio';
+}
+
+// INIT
+checkAuth();
+loadS();
+
+// Escuchar pendientes de Firebase en tiempo real
+function initFirebaseListener() {
+  if(window._fbListenPending) {
+    window._fbListenPending((items) => {
+      S.pending = items;
+      renderSidebar();
+      // Si hay un pendiente activo, actualizarlo
+      if(S.activePendingId) {
+        const p = (S.pending||[]).find(x=>x.id===S.activePendingId);
+        if(p) renderPendingDetail(S.activePendingId);
+      }
+    });
+  }
+}
+
+// Esperar a que Firebase esté listo
+function initFirebaseListeners() {
+  if(window._fbListenPending) {
+    window._fbListenPending((items) => {
+      S.pending = items;
+      renderSidebar();
+      if(S.activePendingId) {
+        const p=(S.pending||[]).find(x=>x.id===S.activePendingId);
+        if(p) renderPendingDetail(S.activePendingId);
+      }
+    });
+  }
+
+  if(window._fbListenPlayers) {
+    window._fbListenPlayers((items) => {
+      // Mergear con localStorage — Firebase es la fuente de verdad
+      S.players = items;
+      saveS();
+      renderSidebar();
+      if(S.activePlayerId) renderMain();
+    });
+  }
+
+  if(window._fbListenMySessions) {
+    window._fbListenMySessions((items) => {
+      S.mySessions = items;
+      saveS();
+      renderSidebar();
+      if(S.showMySessions) renderMain();
+    });
+  }
+}
+
+if(window._firebaseReady) {
+  initFirebaseListeners();
+} else {
+  document.addEventListener('firebaseReady', initFirebaseListeners);
+}
+
+// Preview y compresión de foto en formulario
+function previewFoto(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    // Comprimir imagen antes de guardar
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const MAX = 400;
+      let w = img.width, h = img.height;
+      if(w > h){ if(w > MAX){h = h*(MAX/w); w = MAX;} }
+      else { if(h > MAX){w = w*(MAX/h); h = MAX;} }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const compressed = canvas.toDataURL('image/jpeg', 0.7);
+      document.getElementById('fotoData').value = compressed;
+      document.getElementById('fotoImg').src = compressed;
+      document.getElementById('fotoPreview').style.display = 'block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Mostrar campo "Otro" en factores cuando se marca
+document.addEventListener('change', function(e){
+  if(e.target.name==='factores' && e.target.value==='Otro'){
+    const wrap = document.getElementById('factoresOtroWrap');
+    if(wrap) wrap.style.display = e.target.checked ? 'block' : 'none';
+  }
+});
+</script>
 </body>
 </html>
