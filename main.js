@@ -84,6 +84,22 @@ function renderCamisetas() {
 }
 
 // ---- Render: Sobre mí (contacto, estudios, clubes grandes, certificaciones, experiencia) ----
+function renderSocial() {
+  const el = document.getElementById('sm-social');
+  if (!el) return;
+  el.innerHTML = `
+    <a class="sm-social-icon" href="https://www.instagram.com/lic.catalinabarrio/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
+    </a>
+    <a class="sm-social-icon" href="https://linkedin.com/in/catalina-barrio-539531183/?skipRedirect=true" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10v6.5M7.5 7.2v.1M12 16.5V12.8c0-1.3 1-2.3 2.2-2.3s2.1 1 2.1 2.3v3.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </a>
+    <a class="sm-social-icon" href="https://www.tiktok.com/@lic.catalinabarrio" target="_blank" rel="noopener" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M14 4v9.6a3 3 0 1 1-2.2-2.9M14 4c.3 2 1.8 3.4 4 3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  `;
+}
+
 function renderContacto() {
   const el = document.getElementById('sm-contacto');
   if (!el) return;
@@ -119,18 +135,20 @@ function renderClubesGrandes() {
   `).join('');
 }
 
-function renderListaColapsable(id, items, visibles) {
+function renderLista(id, items) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.innerHTML = items.map((item, i) => `<li class="${i >= visibles ? 'oculto' : ''}">${item}</li>`).join('');
+  el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
 }
 
-function initVerTodas() {
-  document.querySelectorAll('.ver-todas').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const lista = document.getElementById(btn.dataset.target);
-      const expandida = lista.classList.toggle('expandida');
-      btn.textContent = expandida ? 'Ver menos' : 'Ver todas';
+function initTabs() {
+  const tabs = document.querySelectorAll('.sm-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.sm-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.sm-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
     });
   });
 }
@@ -139,10 +157,11 @@ function initVerTodas() {
 function renderProgramas() {
   const row = document.getElementById('row-programas');
   row.innerHTML = PROGRAMAS.map(p => `
-    <div class="burbuja">
-      <div class="burbuja__titulo">${p.titulo}</div>
-      <div class="burbuja__sub">${p.subtitulo}</div>
-      <a href="${p.whatsapp}" class="burbuja__wa" target="_blank" rel="noopener">WhatsApp &#8594;</a>
+    <div class="programa-card programa-card--${p.color}">
+      <span class="programa-card__duracion">${p.duracion}</span>
+      <div class="programa-card__nombre">${p.nombre}</div>
+      <p class="programa-card__publico">${p.publico}</p>
+      <a href="${p.formulario}" class="programa-card__btn" target="_blank" rel="noopener">Conocé más acá</a>
     </div>
   `).join('');
 }
@@ -202,12 +221,15 @@ function initMenu() {
     toggle.setAttribute('aria-expanded', 'true');
   }
 
-  toggle.addEventListener('click', () => {
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
     const isOpen = overlay.classList.contains('open');
     isOpen ? closeMenu() : openMenu();
   });
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeMenu();
+  document.addEventListener('click', (e) => {
+    if (overlay.classList.contains('open') && !overlay.contains(e.target) && e.target !== toggle) {
+      closeMenu();
+    }
   });
   overlay.querySelectorAll('.menu-link').forEach(link => {
     link.addEventListener('click', closeMenu);
@@ -223,12 +245,13 @@ document.addEventListener('DOMContentLoaded', () => {
   renderJugadoras();
   renderTestimonios();
   renderContacto();
+  renderSocial();
   renderFooterContacto();
-  renderListaColapsable('sm-estudios', ESTUDIOS, 2);
+  renderLista('sm-estudios', ESTUDIOS);
   renderClubesGrandes();
-  renderListaColapsable('sm-certificaciones', CERTIFICACIONES, 3);
-  renderListaColapsable('sm-experiencia', EXPERIENCIA, 3);
-  initVerTodas();
+  renderLista('sm-certificaciones', CERTIFICACIONES);
+  renderLista('sm-experiencia', EXPERIENCIA);
+  initTabs();
   renderCamisetas();
   renderProgramas();
   initCarouselNav();

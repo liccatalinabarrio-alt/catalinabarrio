@@ -232,7 +232,7 @@ const TESTIMONIOS = [
   {
     nombre: "Renata Barletta",
     club: "Primera River Plate",
-    foto: "barlettatestimonio.png",
+    foto: "renata.png",
     texto: "Había cosas inconscientes que de cierta manera las traje al consciente con lesiones o mal rendimiento, Cata me ayudó a trabajar esos pensamientos y las creencias que yo misma me creaba. Elegí a Cata hace ya casi tres años y noto muchos cambios tanto adentro como afuera de la cancha. Hoy en día puedo decir que sé de lo que soy capaz y más conectada conmigo misma.",
   },
   {
@@ -291,15 +291,29 @@ const CAMISETAS = [
   { imagen: "nattacamiseta.png", jugadora: "Natta", club: "River" },
   { imagen: "annikacamiseta.png", jugadora: "Annika", club: "Inter Milán" },
   { imagen: "aguscamiseta.png", jugadora: "Agus", club: "Belgrano" },
-  { imagen: "", jugadora: "", club: "" },
-  { imagen: "", jugadora: "", club: "" },
-  { imagen: "", jugadora: "", club: "" },
-  { imagen: "", jugadora: "", club: "" },
 ];
 
 // ---- PROGRAMAS (burbujas de servicios) ----
 const PROGRAMAS = [
-  { titulo: "Programa 01", subtitulo: "Acompañamiento individual", whatsapp: "https://wa.me/5491100000000" },
-  { titulo: "Programa 02", subtitulo: "Proceso a mediano plazo", whatsapp: "https://wa.me/5491100000000" },
-  { titulo: "Programa 03", subtitulo: "Seguimiento integral", whatsapp: "https://wa.me/5491100000000" },
+  {
+    nombre: "Punto de Quiebre",
+    color: "azul",
+    duracion: "3 meses",
+    publico: "Para jugadoras profesionales de primera o reserva/primera que sienten que algo las está frenando —bloqueo mental, inseguridad, presión— y buscan un cambio real, no charlas motivacionales sueltas.",
+    formulario: "https://forms.gle/ZvBcCErw1AUFf2Tr6",
+  },
+  {
+    nombre: "Sin Vuelta Atrás",
+    color: "dorado",
+    duracion: "3 meses",
+    publico: "Para jugadoras profesionales o semi-profesionales fuera de Argentina (España, Italia, Brasil, Uruguay, Chile, entre otros) que ya identificaron que necesitan trabajar lo mental porque les está influyendo en su rendimiento.",
+    formulario: "https://forms.gle/iiZWKKRUuq8AG9pN8",
+  },
+  {
+    nombre: "Mente Fría",
+    color: "verde",
+    duracion: "3 meses",
+    publico: "Para jugadoras amateurs o de inferiores (categorías juveniles) que están formándose y necesitan herramientas mentales desde la base: manejo de la presión, confianza, relación con el error.",
+    formulario: "https://forms.gle/Wv8N6joS2qTVL3zY6",
+  },
 ];
