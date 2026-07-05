@@ -297,23 +297,26 @@ const CAMISETAS = [
 const PROGRAMAS = [
   {
     nombre: "Punto de Quiebre",
+    segmento: "Argentinas de primera",
     color: "azul",
     duracion: "3 meses",
-    publico: "Para jugadoras profesionales de primera o reserva/primera que sienten que algo las está frenando —bloqueo mental, inseguridad, presión— y buscan un cambio real, no charlas motivacionales sueltas.",
+    publico: "Para jugadoras profesionales de primera o reserva/primera que sienten que algo las está frenando —<strong>bloqueo mental, inseguridad, presión</strong>— y buscan <strong>un cambio real</strong>, no charlas motivacionales sueltas.",
     formulario: "https://forms.gle/ZvBcCErw1AUFf2Tr6",
   },
   {
     nombre: "Sin Vuelta Atrás",
+    segmento: "Jugadoras del exterior",
     color: "dorado",
     duracion: "3 meses",
-    publico: "Para jugadoras profesionales o semi-profesionales fuera de Argentina (España, Italia, Brasil, Uruguay, Chile, entre otros) que ya identificaron que necesitan trabajar lo mental porque les está influyendo en su rendimiento.",
+    publico: "Para jugadoras profesionales o semi-profesionales <strong>fuera de Argentina</strong> (España, Italia, Brasil, Uruguay, Chile, entre otros) que ya identificaron que necesitan trabajar lo mental porque <strong>les está influyendo en su rendimiento</strong>.",
     formulario: "https://forms.gle/iiZWKKRUuq8AG9pN8",
   },
   {
     nombre: "Mente Fría",
+    segmento: "Inferiores · Juveniles · Amateurs",
     color: "verde",
     duracion: "3 meses",
-    publico: "Para jugadoras amateurs o de inferiores (categorías juveniles) que están formándose y necesitan herramientas mentales desde la base: manejo de la presión, confianza, relación con el error.",
+    publico: "Para jugadoras <strong>amateurs o de inferiores</strong> (categorías juveniles) que están formándose y necesitan <strong>herramientas mentales desde la base</strong>: manejo de la presión, confianza, relación con el error.",
     formulario: "https://forms.gle/Wv8N6joS2qTVL3zY6",
   },
 ];

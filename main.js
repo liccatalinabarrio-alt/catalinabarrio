@@ -105,13 +105,13 @@ function renderContacto() {
   if (!el) return;
   el.innerHTML = `
     <a class="sm-chip" href="https://wa.me/54${CONTACTO_PERSONAL.whatsapp}" target="_blank" rel="noopener">
-      <span class="sm-chip__icon">&#9742;</span> WhatsApp
+      <svg class="sm-chip__icon" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> WhatsApp
     </a>
     <a class="sm-chip" href="https://instagram.com/${CONTACTO_PERSONAL.instagram.replace('@','')}" target="_blank" rel="noopener">
-      <span class="sm-chip__icon">@</span> ${CONTACTO_PERSONAL.instagram.replace('@','')}
+      <svg class="sm-chip__icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/></svg> ${CONTACTO_PERSONAL.instagram.replace('@','')}
     </a>
     <a class="sm-chip" href="mailto:${CONTACTO_PERSONAL.mail}">
-      <span class="sm-chip__icon">&#9993;</span> Mail
+      <svg class="sm-chip__icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Mail
     </a>
   `;
 }
@@ -160,8 +160,9 @@ function renderProgramas() {
     <div class="programa-card programa-card--${p.color}">
       <span class="programa-card__duracion">${p.duracion}</span>
       <div class="programa-card__nombre">${p.nombre}</div>
+      <span class="programa-card__segmento">${p.segmento}</span>
       <p class="programa-card__publico">${p.publico}</p>
-      <a href="${p.formulario}" class="programa-card__btn" target="_blank" rel="noopener">Conocé más acá</a>
+      <a href="${p.formulario}" class="programa-card__btn" target="_blank" rel="noopener">Conocé más acá &#8594;</a>
     </div>
   `).join('');
 }
