@@ -21,7 +21,7 @@ const JUGADORAS = [
     foto: "annikapaz.png",
     afiliaciones: [
       { nombre: "Inter de Milán", escudo: "inter-annika.png" },
-      { nombre: "Selección Femenina Argentina", escudo: "annika_afa.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -31,7 +31,7 @@ const JUGADORAS = [
     foto: "maricel.png",
     afiliaciones: [
       { nombre: "São Paulo", escudo: "saopablo.png" },
-      { nombre: "Selección Femenina Argentina", escudo: "annika_afa.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -51,7 +51,7 @@ const JUGADORAS = [
     foto: "caroceniza.png",
     afiliaciones: [
       { nombre: "River Plate", escudo: "riverescudo.png" },
-      { nombre: "Selección Femenina Argentina", escudo: "annika_afa.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
