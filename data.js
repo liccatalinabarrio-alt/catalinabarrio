@@ -75,6 +75,16 @@ const JUGADORAS = [
     ],
   },
   {
+    nombre: "Oriana López",
+    posicion: "",
+    pais: "AR",
+    foto: "orilopez.png",
+    afiliaciones: [
+      { nombre: "Club Atlético Huracán", escudo: "huracan.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
+    ],
+  },
+  {
     nombre: "Magalí Natta",
     posicion: "",
     pais: "AR",
