@@ -55,7 +55,7 @@ const JUGADORAS = [
     ],
   },
   {
-    nombre: "Vaitiare Prado",
+    nombre: "Vaitiare Pardo",
     posicion: "",
     pais: "CL",
     foto: "vaitiareprado.png",
@@ -208,6 +208,24 @@ const JUGADORAS = [
     foto: "smith.png",
     afiliaciones: [
       { nombre: "Monroe University", escudo: "" },
+    ],
+  },
+  {
+    nombre: "Catalina Riccomini",
+    posicion: "",
+    pais: "AR",
+    foto: "cattari.png",
+    afiliaciones: [
+      { nombre: "Vélez Sarsfield", escudo: "velezescudo.png" },
+    ],
+  },
+  {
+    nombre: "Carol Pascal",
+    posicion: "",
+    pais: "AR",
+    foto: "pascal.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "riverescudo.png" },
     ],
   },
 ];
