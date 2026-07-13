@@ -228,12 +228,21 @@ const JUGADORAS = [
       { nombre: "River Plate", escudo: "riverescudo.png" },
     ],
   },
+  {
+    nombre: "Pía Álvarez",
+    posicion: "",
+    pais: "AR",
+    foto: "piaalvarez.png",
+    afiliaciones: [
+      { nombre: "Club Atlético Independiente", escudo: "caiescudo.png" },
+    ],
+  },
 ];
 
 // ---- Tarjeta final del carrusel, invitando a sumarse ----
 const CTA_JUGADORAS = {
   titulo: "¿Querés ser la próxima?",
-  whatsapp: "https://wa.me/5491100000000",
+  whatsapp: "https://wa.me/541156145694",
 };
 
 // ---- TESTIMONIOS ----
@@ -322,6 +331,8 @@ const CAMISETAS = [
 ];
 
 // ---- PROGRAMAS (burbujas de servicios) ----
+// El botón de cada programa abre WhatsApp al número de Cata (CONTACTO_PERSONAL.whatsapp)
+// con un mensaje pre-cargado que incluye el nombre del programa (ver renderProgramas en main.js).
 const PROGRAMAS = [
   {
     nombre: "Punto de Quiebre",
@@ -329,7 +340,6 @@ const PROGRAMAS = [
     color: "azul",
     duracion: "3 meses",
     publico: "Para jugadoras profesionales de primera o reserva/primera que sienten que algo las está frenando —<strong>bloqueo mental, inseguridad, presión</strong>— y buscan <strong>un cambio real</strong>, no charlas motivacionales sueltas.",
-    formulario: "https://forms.gle/ZvBcCErw1AUFf2Tr6",
   },
   {
     nombre: "Sin Vuelta Atrás",
@@ -337,7 +347,6 @@ const PROGRAMAS = [
     color: "dorado",
     duracion: "3 meses",
     publico: "Para jugadoras profesionales o semi-profesionales <strong>fuera de Argentina</strong> (España, Italia, Brasil, Uruguay, Chile, entre otros) que ya identificaron que necesitan trabajar lo mental porque <strong>les está influyendo en su rendimiento</strong>.",
-    formulario: "https://forms.gle/iiZWKKRUuq8AG9pN8",
   },
   {
     nombre: "Mente Fría",
@@ -345,6 +354,5 @@ const PROGRAMAS = [
     color: "verde",
     duracion: "3 meses",
     publico: "Para jugadoras <strong>amateurs o de inferiores</strong> (categorías juveniles) que están formándose y necesitan <strong>herramientas mentales desde la base</strong>: manejo de la presión, confianza, relación con el error.",
-    formulario: "https://forms.gle/Wv8N6joS2qTVL3zY6",
   },
 ];

@@ -156,15 +156,19 @@ function initTabs() {
 // ---- Render: Programas ----
 function renderProgramas() {
   const row = document.getElementById('row-programas');
-  row.innerHTML = PROGRAMAS.map(p => `
+  row.innerHTML = PROGRAMAS.map(p => {
+    const mensaje = `Hola, quiero info sobre ${p.nombre} y lo siguiente:\n- Nombre y Apellido\n- Club actual\n- Edad`;
+    const wa = `https://wa.me/54${CONTACTO_PERSONAL.whatsapp}?text=${encodeURIComponent(mensaje)}`;
+    return `
     <div class="programa-card programa-card--${p.color}">
       <span class="programa-card__duracion">${p.duracion}</span>
       <div class="programa-card__nombre">${p.nombre}</div>
       <span class="programa-card__segmento">${p.segmento}</span>
       <p class="programa-card__publico">${p.publico}</p>
-      <a href="${p.formulario}" class="programa-card__btn" target="_blank" rel="noopener">Conocé más acá &#8594;</a>
+      <a href="${wa}" class="programa-card__btn" target="_blank" rel="noopener">Escribinos por WhatsApp &#8594;</a>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // ---- Carruseles con flechas (genérico) ----
