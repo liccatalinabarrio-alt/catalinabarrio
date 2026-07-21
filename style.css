@@ -338,7 +338,7 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
   object-fit: contain;
   filter: drop-shadow(0 2px 5px rgba(0,0,0,0.55));
 }
-@media (max-width: 860px) {
+@media (max-width: 640px) {
   .hero__side-col { display: none; }
 }
 .hero__grid {
