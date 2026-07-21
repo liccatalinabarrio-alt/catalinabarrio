@@ -127,6 +127,7 @@ const JUGADORAS = [
     foto: "barletta.png",
     afiliaciones: [
       { nombre: "River Plate", escudo: "riverescudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -145,6 +146,7 @@ const JUGADORAS = [
     foto: "bulacio.png",
     afiliaciones: [
       { nombre: "Belgrano de Córdoba", escudo: "belgranoescudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -163,6 +165,7 @@ const JUGADORAS = [
     foto: "acetelgaray.png",
     afiliaciones: [
       { nombre: "Club Atlético Huracán", escudo: "huracan.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -181,6 +184,7 @@ const JUGADORAS = [
     foto: "albertina.png",
     afiliaciones: [
       { nombre: "Boca Juniors", escudo: "bocaescudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -199,6 +203,7 @@ const JUGADORAS = [
     foto: "saleme.png",
     afiliaciones: [
       { nombre: "River Plate", escudo: "riverescudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
   {
@@ -235,6 +240,7 @@ const JUGADORAS = [
     foto: "piaalvarez.png",
     afiliaciones: [
       { nombre: "Club Atlético Independiente", escudo: "caiescudo.png" },
+      { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
 ];
