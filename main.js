@@ -187,6 +187,32 @@ function initCarouselNav() {
   initCarouselArrows('track-camisetas', 'prev-camiseta', 'next-camiseta', '.card-camiseta');
 }
 
+// ---- Widget flotante: grupo de WhatsApp ----
+function initWaFloat() {
+  const el = document.getElementById('wa-float');
+  const closeBtn = document.getElementById('wa-float-close');
+  const trigger = document.getElementById('jugadoras');
+  if (!el || !trigger) return;
+
+  if (localStorage.getItem('waFloatClosed') === '1') {
+    el.style.display = 'none';
+    return;
+  }
+
+  const io = new IntersectionObserver(([entry]) => {
+    if (entry.boundingClientRect.top <= 0) {
+      el.classList.add('is-visible');
+      io.disconnect();
+    }
+  }, { threshold: 0 });
+  io.observe(trigger);
+
+  closeBtn.addEventListener('click', () => {
+    el.style.display = 'none';
+    localStorage.setItem('waFloatClosed', '1');
+  });
+}
+
 // ---- Reveal on scroll ----
 function initReveal() {
   const els = document.querySelectorAll('.reveal');
@@ -290,4 +316,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProgramas();
   initCarouselNav();
   initReveal();
+  initWaFloat();
 });

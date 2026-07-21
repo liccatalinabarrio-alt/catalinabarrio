@@ -1171,6 +1171,89 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
 }
 .footer__social a:hover { border-color: var(--blue); color: var(--blue); }
 
+/* -------------------- Widget flotante: grupo de WhatsApp -------------------- */
+.wa-float {
+  position: fixed;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  z-index: 60;
+  width: 190px;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 20px 45px -20px rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.wa-float.is-visible { opacity: 1; pointer-events: auto; }
+.wa-float__close {
+  position: absolute;
+  top: 6px; right: 8px;
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+.wa-float__close:hover { color: var(--ink); }
+.wa-float__link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-decoration: none;
+}
+.wa-float__badge {
+  align-self: flex-start;
+  background: rgba(37,211,102,0.15);
+  color: #25d366;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.wa-float__title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.wa-float__text {
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+.wa-float__cta {
+  margin-top: 4px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #06070a;
+  background: #25d366;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition: transform 0.2s ease;
+}
+.wa-float:hover .wa-float__cta { transform: translateY(-2px); }
+@media (max-width: 640px) {
+  .wa-float { width: 148px; right: 10px; padding: 12px 12px 10px; }
+  .wa-float__title { font-size: 0.78rem; }
+  .wa-float__text { display: none; }
+}
+
 /* -------------------- Responsive -------------------- */
 @media (max-width: 860px) {
   .sobre-mi { grid-template-columns: 1fr; }
