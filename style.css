@@ -1189,6 +1189,17 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
   transition: opacity 0.4s ease;
 }
 .wa-float.is-visible { opacity: 1; pointer-events: auto; }
+.wa-float.is-dragging { transition: none; }
+.wa-float__handle {
+  width: 32px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+  margin: 0 auto 10px;
+  cursor: grab;
+  touch-action: none;
+}
+.wa-float.is-dragging .wa-float__handle { cursor: grabbing; }
 .wa-float__close {
   position: absolute;
   top: 6px; right: 8px;

@@ -191,26 +191,84 @@ function initCarouselNav() {
 function initWaFloat() {
   const el = document.getElementById('wa-float');
   const closeBtn = document.getElementById('wa-float-close');
-  const trigger = document.getElementById('jugadoras');
-  if (!el || !trigger) return;
+  if (!el) return;
 
   if (localStorage.getItem('waFloatClosed') === '1') {
     el.style.display = 'none';
     return;
   }
 
-  const io = new IntersectionObserver(([entry]) => {
-    if (entry.boundingClientRect.top <= 0) {
+  function showOnScroll() {
+    if (window.scrollY > 10) {
       el.classList.add('is-visible');
-      io.disconnect();
+      window.removeEventListener('scroll', showOnScroll);
     }
-  }, { threshold: 0 });
-  io.observe(trigger);
+  }
+  window.addEventListener('scroll', showOnScroll, { passive: true });
+  showOnScroll();
 
   closeBtn.addEventListener('click', () => {
     el.style.display = 'none';
     localStorage.setItem('waFloatClosed', '1');
   });
+
+  initWaFloatDrag(el);
+}
+
+// ---- Widget flotante: arrastrar para reposicionar ----
+function initWaFloatDrag(el) {
+  const handle = document.getElementById('wa-float-handle');
+  if (!el || !handle) return;
+
+  const savedPos = localStorage.getItem('waFloatPos');
+  if (savedPos) {
+    try {
+      const pos = JSON.parse(savedPos);
+      el.style.left = pos.left;
+      el.style.top = pos.top;
+      el.style.right = 'auto';
+      el.style.transform = 'none';
+    } catch (err) {}
+  }
+
+  let dragging = false;
+  let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+  handle.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    el.classList.add('is-dragging');
+    const rect = el.getBoundingClientRect();
+    el.style.left = rect.left + 'px';
+    el.style.top = rect.top + 'px';
+    el.style.right = 'auto';
+    el.style.transform = 'none';
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = rect.left;
+    startTop = rect.top;
+    handle.setPointerCapture(e.pointerId);
+  });
+
+  handle.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const maxLeft = window.innerWidth - el.offsetWidth - 4;
+    const maxTop = window.innerHeight - el.offsetHeight - 4;
+    const newLeft = Math.min(Math.max(4, startLeft + dx), maxLeft);
+    const newTop = Math.min(Math.max(4, startTop + dy), maxTop);
+    el.style.left = newLeft + 'px';
+    el.style.top = newTop + 'px';
+  });
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    el.classList.remove('is-dragging');
+    localStorage.setItem('waFloatPos', JSON.stringify({ left: el.style.left, top: el.style.top }));
+  }
+  handle.addEventListener('pointerup', endDrag);
+  handle.addEventListener('pointercancel', endDrag);
 }
 
 // ---- Reveal on scroll ----
