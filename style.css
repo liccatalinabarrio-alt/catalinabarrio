@@ -533,7 +533,7 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
 }
 .card-jugadora__flag.flag-cl {
   background: linear-gradient(to bottom, #f6f6f6 0 50%, #d52b1e 50%);
-  position: relative;
+  position: absolute;
 }
 .card-jugadora__flag.flag-cl::before {
   content: '';
@@ -547,7 +547,7 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
     #b22234 0 2.9px,
     #f6f6f6 2.9px 5.8px
   );
-  position: relative;
+  position: absolute;
 }
 .card-jugadora__flag.flag-us::before {
   content: '';
