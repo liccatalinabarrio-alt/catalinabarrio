@@ -150,7 +150,7 @@ const JUGADORAS = [
     ],
   },
   {
-    nombre: "Constanza Pacheco",
+    nombre: "Costanza Pacheco",
     posicion: "",
     pais: "AR",
     foto: "cotypacheco.png",
@@ -279,7 +279,7 @@ const TESTIMONIOS = [
     texto: "Había cosas inconscientes que de cierta manera las traje al consciente con lesiones o mal rendimiento, Cata me ayudó a trabajar esos pensamientos y las creencias que yo misma me creaba. Elegí a Cata hace ya casi tres años y noto muchos cambios tanto adentro como afuera de la cancha. Hoy en día puedo decir que sé de lo que soy capaz y más conectada conmigo misma.",
   },
   {
-    nombre: "Constanza Pacheco",
+    nombre: "Costanza Pacheco",
     club: "Primera River Plate",
     foto: "cotytestimonio.png",
     texto: "En estos años trabajando con Cata aprendí a ser mucho más consciente, además de generar muchas herramientas que me potenciaron muchísimo dentro de la cancha, desde la confianza y el autoconocimiento. También trabajando mi identidad, desmintiendo creencias y autoexigencias, que me permiten vivir todo esto de una manera mucho más sana y linda tanto dentro como fuera de la cancha.",
