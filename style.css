@@ -341,6 +341,41 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
 @media (max-width: 640px) {
   .hero__side-col { display: none; }
 }
+.hero__mobile-strip {
+  display: none;
+}
+.hero__mobile-track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  animation: heroStripScroll 20s linear infinite;
+}
+.hero__mobile-track .hero__flag-dot {
+  width: 26px; height: 26px;
+}
+.hero__mobile-track .hero__shield-dot {
+  width: 32px; height: 32px;
+}
+@keyframes heroStripScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__mobile-track { animation: none; }
+}
+@media (max-width: 640px) {
+  .hero__mobile-strip {
+    display: block;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    padding: 6px 0 4px;
+    margin-top: 8px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+}
 .hero__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

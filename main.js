@@ -297,18 +297,11 @@ function renderHeroShield() {
 }
 
 // ---- Render: columnas del hero (banderas y escudos reales, según data.js) ----
-function renderHeroFlags() {
-  const el = document.getElementById('hero-flags');
-  if (!el) return;
-  const paises = [...new Set(JUGADORAS.map(j => j.pais).filter(Boolean))];
-  if (!paises.length) { el.style.display = 'none'; return; }
-  const dots = paises.map(p => `<span class="hero__flag-dot flag-${p.toLowerCase()}" title="${p}"></span>`).join('');
-  el.innerHTML = `<div class="hero__side-track">${dots}${dots}</div>`;
+function getPaisesUnicos() {
+  return [...new Set(JUGADORAS.map(j => j.pais).filter(Boolean))];
 }
 
-function renderHeroShields() {
-  const el = document.getElementById('hero-shields');
-  if (!el) return;
+function getEscudosUnicos() {
   const vistos = new Set();
   const escudos = [];
   JUGADORAS.forEach(j => {
@@ -318,9 +311,39 @@ function renderHeroShields() {
       escudos.push(a);
     });
   });
+  return escudos;
+}
+
+function renderHeroFlags() {
+  const el = document.getElementById('hero-flags');
+  if (!el) return;
+  const paises = getPaisesUnicos();
+  if (!paises.length) { el.style.display = 'none'; return; }
+  const dots = paises.map(p => `<span class="hero__flag-dot flag-${p.toLowerCase()}" title="${p}"></span>`).join('');
+  el.innerHTML = `<div class="hero__side-track">${dots}${dots}</div>`;
+}
+
+function renderHeroShields() {
+  const el = document.getElementById('hero-shields');
+  if (!el) return;
+  const escudos = getEscudosUnicos();
   if (!escudos.length) { el.style.display = 'none'; return; }
   const dots = escudos.map(a => `<span class="hero__shield-dot"><img src="${a.escudo}" alt="Escudo de ${a.nombre}" title="${a.nombre}"></span>`).join('');
   el.innerHTML = `<div class="hero__side-track">${dots}${dots}</div>`;
+}
+
+// ---- Render: franja horizontal (banderas + escudos) para celular/tablet ----
+function renderHeroMobileStrip() {
+  const el = document.getElementById('hero-mobile-strip');
+  if (!el) return;
+  const paises = getPaisesUnicos();
+  const escudos = getEscudosUnicos();
+  const flagItems = paises.map(p => `<span class="hero__flag-dot flag-${p.toLowerCase()}" title="${p}"></span>`);
+  const shieldItems = escudos.map(a => `<span class="hero__shield-dot"><img src="${a.escudo}" alt="Escudo de ${a.nombre}" title="${a.nombre}"></span>`);
+  const items = [...flagItems, ...shieldItems];
+  if (!items.length) { el.style.display = 'none'; return; }
+  const html = items.join('');
+  el.innerHTML = `<div class="hero__mobile-track">${html}${html}</div>`;
 }
 
 // ---- Menú (rayas) ----
@@ -360,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHeroShield();
   renderHeroFlags();
   renderHeroShields();
+  renderHeroMobileStrip();
   renderJugadoras();
   renderTestimonios();
   renderContacto();
