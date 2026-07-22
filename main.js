@@ -343,7 +343,7 @@ function renderHeroMobileStrip() {
   const items = [...flagItems, ...shieldItems];
   if (!items.length) { el.style.display = 'none'; return; }
   const html = items.join('');
-  el.innerHTML = `<div class="hero__mobile-track">${html}${html}</div>`;
+  el.innerHTML = `<div class="hero__mobile-mask"><div class="hero__mobile-track">${html}${html}</div></div>`;
 }
 
 // ---- Menú (rayas) ----
