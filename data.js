@@ -243,6 +243,15 @@ const JUGADORAS = [
       { nombre: "Selección Femenina Argentina", escudo: "annika.afa.png" },
     ],
   },
+  {
+    nombre: "Jazmín Torres Jiuliani",
+    posicion: "",
+    pais: "AR",
+    foto: "jazmintorres.png",
+    afiliaciones: [
+      { nombre: "Boca Juniors", escudo: "bocaescudo.png" },
+    ],
+  },
 ];
 
 // ---- Tarjeta final del carrusel, invitando a sumarse ----
@@ -334,6 +343,7 @@ const CAMISETAS = [
   { imagen: "nattacamiseta.png", jugadora: "Natta", club: "River" },
   { imagen: "annikacamiseta.png", jugadora: "Annika", club: "Inter Milán" },
   { imagen: "aguscamiseta.png", jugadora: "Agus", club: "Belgrano" },
+  { imagen: "solanacamiseta.png", jugadora: "Solana", club: "San Lorenzo" },
 ];
 
 // ---- PROGRAMAS (burbujas de servicios) ----
