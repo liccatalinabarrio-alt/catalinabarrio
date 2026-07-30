@@ -252,6 +252,15 @@ const JUGADORAS = [
       { nombre: "Boca Juniors", escudo: "bocaescudo.png" },
     ],
   },
+  {
+    nombre: "Isabella Basile",
+    posicion: "",
+    pais: "AR",
+    foto: "isabellabasile.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "riverescudo.png" },
+    ],
+  },
 ];
 
 // ---- Tarjeta final del carrusel, invitando a sumarse ----
