@@ -9,8 +9,8 @@ function iniciales(nombre) {
 
 // ---- Render: Jugadoras ----
 function renderJugadoras() {
-  const track = document.getElementById('carousel-jugadoras');
-  track.innerHTML = JUGADORAS.map(j => `
+  const el = document.getElementById('carousel-jugadoras');
+  const cardsHtml = JUGADORAS.map(j => `
     <div class="card-jugadora">
       <div class="card-jugadora__photo">
         ${j.foto
@@ -36,6 +36,7 @@ function renderJugadoras() {
       <span class="card-jugadora--cta__texto">${CTA_JUGADORAS.titulo}</span>
     </a>
   `;
+  el.innerHTML = `<div class="carousel__track">${cardsHtml}${cardsHtml}</div>`;
 }
 
 // ---- Render: Testimonios ----
@@ -182,43 +183,70 @@ function initCarouselArrows(trackId, prevId, nextId, cardSelector) {
   next.addEventListener('click', () => track.scrollBy({ left: step() * 2, behavior: 'smooth' }));
 }
 function initCarouselNav() {
-  initCarouselArrows('carousel-jugadoras', 'prev-jugadora', 'next-jugadora', '.card-jugadora');
   initCarouselArrows('grid-testimonios', 'prev-testimonio', 'next-testimonio', '.card-testimonio');
   initCarouselArrows('track-camisetas', 'prev-camiseta', 'next-camiseta', '.card-camiseta');
 }
 
-// ---- Autoplay: hace avanzar solo el carrusel de jugadoras ----
-function initCarouselAutoplay(trackId, cardSelector, delay = 3200) {
-  const track = document.getElementById(trackId);
-  if (!track) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+// ---- Carrusel de jugadoras: desplazamiento continuo, igual al de los escudos del hero ----
+function initCarouselMarquee(viewportId, cardSelector, speed = 40) {
+  const viewport = document.getElementById(viewportId);
+  const track = viewport?.querySelector('.carousel__track');
+  if (!viewport || !track) return;
 
-  let timer = null;
+  const prev = document.getElementById('prev-jugadora');
+  const next = document.getElementById('next-jugadora');
 
-  function step() {
-    const cardWidth = (track.querySelector(cardSelector)?.offsetWidth || 210) + 18;
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    if (track.scrollLeft >= maxScroll - 5) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: cardWidth, behavior: 'smooth' });
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (prev) prev.style.display = 'none';
+    if (next) next.style.display = 'none';
+    return;
+  }
+
+  let pos = 0;
+  let paused = false;
+  let rafId = null;
+  let lastTime = null;
+
+  const halfWidth = () => track.scrollWidth / 2;
+  const cardStep = () => (track.querySelector(cardSelector)?.offsetWidth || 210) + 18;
+
+  function apply() {
+    track.style.transform = `translateX(${-pos}px)`;
+  }
+
+  function frame(time) {
+    if (lastTime === null) lastTime = time;
+    const dt = (time - lastTime) / 1000;
+    lastTime = time;
+    if (!paused) {
+      pos += speed * dt;
+      const hw = halfWidth();
+      if (pos >= hw) pos -= hw;
+      apply();
     }
+    rafId = requestAnimationFrame(frame);
   }
+  rafId = requestAnimationFrame(frame);
 
-  function start() {
-    stop();
-    timer = setInterval(step, delay);
-  }
-  function stop() {
-    if (timer) clearInterval(timer);
-  }
+  function pause() { paused = true; }
+  function resume() { paused = false; lastTime = null; }
 
-  start();
-  track.addEventListener('mouseenter', stop);
-  track.addEventListener('mouseleave', start);
-  track.addEventListener('touchstart', stop, { passive: true });
-  track.addEventListener('touchend', () => { stop(); setTimeout(start, 4000); }, { passive: true });
-  track.addEventListener('pointerdown', stop);
+  viewport.addEventListener('mouseenter', pause);
+  viewport.addEventListener('mouseleave', resume);
+  viewport.addEventListener('touchstart', pause, { passive: true });
+  viewport.addEventListener('touchend', () => setTimeout(resume, 3000), { passive: true });
+
+  function manualStep(dir) {
+    pos += dir * cardStep();
+    const hw = halfWidth();
+    if (pos >= hw) pos -= hw;
+    if (pos < 0) pos += hw;
+    apply();
+    pause();
+    setTimeout(resume, 3000);
+  }
+  if (prev) prev.addEventListener('click', () => manualStep(-1));
+  if (next) next.addEventListener('click', () => manualStep(1));
 }
 
 // ---- Widget flotante: grupo de WhatsApp ----
@@ -431,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCamisetas();
   renderProgramas();
   initCarouselNav();
-  initCarouselAutoplay('carousel-jugadoras', '.card-jugadora');
+  initCarouselMarquee('carousel-jugadoras', '.card-jugadora');
   initReveal();
   initWaFloat();
 });

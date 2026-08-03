@@ -530,14 +530,15 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
 /* -------------------- Carrusel jugadoras -------------------- */
 .carousel-wrap { position: relative; }
 .carousel {
+  overflow: hidden;
+  padding-bottom: 8px;
+}
+.carousel__track {
   display: flex;
   gap: 18px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 8px;
-  scrollbar-width: none;
+  width: max-content;
+  will-change: transform;
 }
-.carousel::-webkit-scrollbar { display: none; }
 
 .card-jugadora {
   scroll-snap-align: start;
