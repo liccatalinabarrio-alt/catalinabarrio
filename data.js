@@ -261,6 +261,15 @@ const JUGADORAS = [
       { nombre: "River Plate", escudo: "riverescudo.png" },
     ],
   },
+  {
+    nombre: "Ayelén Nacimiento",
+    posicion: "",
+    pais: "AR",
+    foto: "ayelennacimiento.png",
+    afiliaciones: [
+      { nombre: "Boca Juniors", escudo: "bocaescudo.png" },
+    ],
+  },
 ];
 
 // ---- Tarjeta final del carrusel, invitando a sumarse ----

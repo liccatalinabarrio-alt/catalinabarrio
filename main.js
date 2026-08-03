@@ -187,6 +187,40 @@ function initCarouselNav() {
   initCarouselArrows('track-camisetas', 'prev-camiseta', 'next-camiseta', '.card-camiseta');
 }
 
+// ---- Autoplay: hace avanzar solo el carrusel de jugadoras ----
+function initCarouselAutoplay(trackId, cardSelector, delay = 3200) {
+  const track = document.getElementById(trackId);
+  if (!track) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let timer = null;
+
+  function step() {
+    const cardWidth = (track.querySelector(cardSelector)?.offsetWidth || 210) + 18;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (track.scrollLeft >= maxScroll - 5) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    }
+  }
+
+  function start() {
+    stop();
+    timer = setInterval(step, delay);
+  }
+  function stop() {
+    if (timer) clearInterval(timer);
+  }
+
+  start();
+  track.addEventListener('mouseenter', stop);
+  track.addEventListener('mouseleave', start);
+  track.addEventListener('touchstart', stop, { passive: true });
+  track.addEventListener('touchend', () => { stop(); setTimeout(start, 4000); }, { passive: true });
+  track.addEventListener('pointerdown', stop);
+}
+
 // ---- Widget flotante: grupo de WhatsApp ----
 function initWaFloat() {
   const el = document.getElementById('wa-float');
@@ -397,6 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCamisetas();
   renderProgramas();
   initCarouselNav();
+  initCarouselAutoplay('carousel-jugadoras', '.card-jugadora');
   initReveal();
   initWaFloat();
 });
