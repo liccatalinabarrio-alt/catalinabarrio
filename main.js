@@ -203,9 +203,10 @@ function initCarouselMarquee(viewportId, cardSelector, speed = 40) {
   }
 
   let pos = 0;
-  let paused = false;
+  let paused = true;
   let rafId = null;
   let lastTime = null;
+  setTimeout(() => { paused = false; lastTime = null; }, 2000);
 
   const halfWidth = () => track.scrollWidth / 2;
   const cardStep = () => (track.querySelector(cardSelector)?.offsetWidth || 210) + 18;
