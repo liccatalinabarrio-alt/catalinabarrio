@@ -395,6 +395,20 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
   gap: clamp(24px, 4vw, 56px);
 }
 .hero__content { position: relative; z-index: 2; }
+.hero__title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hero__jcs-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+@media (max-width: 860px) {
+  .hero__jcs-badge { width: 52px; height: 52px; }
+}
 .hero__eyebrow {
   font-family: var(--accent-font);
   font-style: italic;
