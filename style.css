@@ -389,59 +389,56 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
   }
 }
 .hero__grid {
-  position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: clamp(24px, 4vw, 56px);
+  gap: clamp(16px, 3vw, 36px);
 }
 .hero__content { position: relative; z-index: 2; }
 .hero__jcs-seal {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 4;
-  width: clamp(140px, 16vw, 190px);
-  height: clamp(140px, 16vw, 190px);
-  display: block;
-  cursor: pointer;
-}
-.hero__jcs-seal-ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  fill: var(--blue-bright);
-  animation: jcsSealSpin 16s linear infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  z-index: 2;
 }
 .hero__jcs-seal-img {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 60%;
-  height: 60%;
-  transform: translate(-50%, -50%);
+  width: clamp(140px, 15vw, 190px);
+  height: clamp(140px, 15vw, 190px);
   border-radius: 50%;
-  filter: drop-shadow(0 8px 20px rgba(47,111,237,0.5));
+  object-fit: contain;
+  filter: drop-shadow(0 8px 22px rgba(47,111,237,0.5));
   animation: jcsSealPulse 2.6s ease-in-out infinite;
 }
-@keyframes jcsSealSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.hero__jcs-seal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue);
+  color: var(--bg);
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 11px 20px;
+  white-space: nowrap;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hero__jcs-seal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px -12px rgba(47,111,237,0.5);
 }
 @keyframes jcsSealPulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.06); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero__jcs-seal-ring, .hero__jcs-seal-img { animation: none; }
+  .hero__jcs-seal-img { animation: none; }
 }
 @media (max-width: 860px) {
-  .hero__jcs-seal {
-    position: static;
-    transform: none;
-    margin: 18px auto;
-  }
+  .hero__jcs-seal { margin: 6px auto 18px; }
 }
 .hero__eyebrow {
   font-family: var(--accent-font);

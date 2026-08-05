@@ -159,7 +159,7 @@ function renderProgramas() {
   const row = document.getElementById('row-programas');
   const p = PROGRAMA_JCS;
   const botones = p.botones.map(b => {
-    const mensaje = `Hola, quiero info sobre ${p.nombre} - ${b.nombre}.\nNombre y Apellido: \nClub actual: \nEdad: `;
+    const mensaje = `Hola! Quiero más información sobre "JUGÁ COMO SABES" (${b.nombre}).\nCompleta con tus datos: Nombre y Apellido, Club y edad`;
     const wa = `https://wa.me/54${CONTACTO_PERSONAL.whatsapp}?text=${encodeURIComponent(mensaje)}`;
     return `<a href="${wa}" class="programa-jcs__btn" target="_blank" rel="noopener">${b.nombre}</a>`;
   }).join('');
