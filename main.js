@@ -157,19 +157,22 @@ function initTabs() {
 // ---- Render: Programas ----
 function renderProgramas() {
   const row = document.getElementById('row-programas');
-  row.innerHTML = PROGRAMAS.map(p => {
-    const mensaje = `Hola, quiero info sobre el programa ${p.nombre}.\nNombre y Apellido: \nClub actual: \nEdad: `;
+  const p = PROGRAMA_JCS;
+  const botones = p.botones.map(b => {
+    const mensaje = `Hola, quiero info sobre ${p.nombre} - ${b.nombre}.\nNombre y Apellido: \nClub actual: \nEdad: `;
     const wa = `https://wa.me/54${CONTACTO_PERSONAL.whatsapp}?text=${encodeURIComponent(mensaje)}`;
-    return `
-    <div class="programa-card programa-card--${p.color}">
-      <span class="programa-card__duracion">${p.duracion}</span>
-      <div class="programa-card__nombre">${p.nombre}</div>
-      <span class="programa-card__segmento">${p.segmento}</span>
-      <p class="programa-card__publico">${p.publico}</p>
-      <a href="${wa}" class="programa-card__btn" target="_blank" rel="noopener">Escribinos por WhatsApp</a>
+    return `<a href="${wa}" class="programa-jcs__btn" target="_blank" rel="noopener">${b.nombre}</a>`;
+  }).join('');
+  row.innerHTML = `
+    <div class="programa-jcs">
+      <div class="programa-jcs__logo-wrap">
+        <img src="${p.logo}" alt="${p.nombre}" class="programa-jcs__logo">
+      </div>
+      <h3 class="programa-jcs__nombre">${p.nombre}</h3>
+      <p class="programa-jcs__desc">${p.descripcion}</p>
+      <div class="programa-jcs__botones">${botones}</div>
     </div>
   `;
-  }).join('');
 }
 
 // ---- Carruseles con flechas (genérico) ----

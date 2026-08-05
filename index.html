@@ -53,18 +53,23 @@
   <div class="hero__side-col hero__side-col--right" id="hero-shields"></div>
   <div class="container hero__grid">
     <div class="hero__content">
-      <div class="hero__title-row">
-        <span class="hero__jcs-badge">
-          <img src="jugacomosabes.png" alt="Juga Como Sabes">
-        </span>
-        <div>
-          <p class="hero__eyebrow">Psicóloga</p>
-          <h1 class="hero__title">Catalina <span class="accent">Barrio</span></h1>
-        </div>
-      </div>
+      <p class="hero__eyebrow">Psicóloga</p>
+      <h1 class="hero__title">Catalina <span class="accent">Barrio</span></h1>
       <p class="hero__tagline">Tu mente, tu ventaja competitiva.</p>
       <p class="hero__sub">Psicóloga deportiva de fútbol femenino.</p>
     </div>
+    <a href="#programas" class="hero__jcs-seal" aria-label="Programa Juga Como Sabes">
+      <svg class="hero__jcs-seal-ring" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <path id="jcsCirclePath" d="M 100,100 m -80,0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+        </defs>
+        <circle cx="100" cy="100" r="97" fill="none" stroke="var(--blue)" stroke-width="2"></circle>
+        <text font-size="12" letter-spacing="3" font-weight="700">
+          <textPath href="#jcsCirclePath" startOffset="0%">PROGRAMA JUGA COMO SABES • PROGRAMA JUGA COMO SABES •</textPath>
+        </text>
+      </svg>
+      <img src="jugacomosabes.png" alt="" class="hero__jcs-seal-img" aria-hidden="true">
+    </a>
     <div class="hero__photo">
       <div class="hero__photo-frame">
         <img src="hero-cata-nueva.png" alt="Lic. Catalina Barrio">
@@ -126,10 +131,10 @@
     <div class="section-head reveal" style="text-align:center">
       <p class="eyebrow" style="display:block">Entrenamiento mental</p>
       <h2 class="section-title">Programas</h2>
-      <p class="lede" style="margin:14px auto 0">Elegí el programa según en qué momento estás, y empezá a entrenar la cabeza con la misma seriedad con la que entrenás el cuerpo.</p>
+      <p class="lede" style="margin:14px auto 0">Elegí tu categoría y empezá a entrenar la cabeza con la misma seriedad con la que entrenás el cuerpo.</p>
     </div>
     <div class="programas-spotlight reveal">
-      <div class="programas-row" id="row-programas"></div>
+      <div id="row-programas"></div>
     </div>
   </div>
 </section>

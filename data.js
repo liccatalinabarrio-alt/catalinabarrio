@@ -364,29 +364,15 @@ const CAMISETAS = [
   { imagen: "solanacamiseta.png", jugadora: "Solana", club: "San Lorenzo" },
 ];
 
-// ---- PROGRAMAS (burbujas de servicios) ----
-// El botón de cada programa abre WhatsApp al número de Cata (CONTACTO_PERSONAL.whatsapp)
-// con un mensaje pre-cargado que incluye el nombre del programa (ver renderProgramas en main.js).
-const PROGRAMAS = [
-  {
-    nombre: "Punto de Quiebre",
-    segmento: "Argentinas de primera",
-    color: "azul",
-    duracion: "3 meses",
-    publico: "Para jugadoras profesionales de primera o reserva/primera que sienten que algo las está frenando —<strong>bloqueo mental, inseguridad, presión</strong>— y buscan <strong>un cambio real</strong>, no charlas motivacionales sueltas.",
-  },
-  {
-    nombre: "Sin Vuelta Atrás",
-    segmento: "Jugadoras del exterior",
-    color: "dorado",
-    duracion: "3 meses",
-    publico: "Para jugadoras profesionales o semi-profesionales <strong>fuera de Argentina</strong> (España, Italia, Brasil, Uruguay, Chile, entre otros) que ya identificaron que necesitan trabajar lo mental porque <strong>les está influyendo en su rendimiento</strong>.",
-  },
-  {
-    nombre: "Mente Fría",
-    segmento: "Inferiores · Juveniles · Amateurs",
-    color: "verde",
-    duracion: "3 meses",
-    publico: "Para jugadoras <strong>amateurs o de inferiores</strong> (categorías juveniles) que están formándose y necesitan <strong>herramientas mentales desde la base</strong>: manejo de la presión, confianza, relación con el error.",
-  },
-];
+// ---- PROGRAMA (único: Juga Como Sabes) ----
+// Cada botón abre WhatsApp al número de Cata (CONTACTO_PERSONAL.whatsapp)
+// con un mensaje pre-cargado que incluye el nombre de la categoría (ver renderProgramas en main.js).
+const PROGRAMA_JCS = {
+  nombre: "Juga Como Sabes",
+  logo: "jugacomosabes.png",
+  descripcion: "El programa que entrena la cabeza con la misma seriedad con la que se entrena el cuerpo.",
+  botones: [
+    { nombre: "Primera División" },
+    { nombre: "Juveniles" },
+  ],
+};
