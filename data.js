@@ -270,6 +270,15 @@ const JUGADORAS = [
       { nombre: "Boca Juniors", escudo: "bocaescudo.png" },
     ],
   },
+  {
+    nombre: "Juana Islas Duran",
+    posicion: "",
+    pais: "AR",
+    foto: "juanaislas.png",
+    afiliaciones: [
+      { nombre: "Gimnasia y Esgrima de La Plata", escudo: "gimnasiaescudo.png" },
+    ],
+  },
 ];
 
 // ---- Tarjeta final del carrusel, invitando a sumarse ----
