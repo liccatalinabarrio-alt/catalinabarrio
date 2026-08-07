@@ -681,6 +681,26 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
   transition: border-color 0.25s ease, color 0.25s ease;
 }
 .carousel-nav button:hover { border-color: var(--blue); color: var(--blue); }
+.carousel-scrollbar {
+  position: relative;
+  height: 6px;
+  margin-top: 20px;
+  background: var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  touch-action: none;
+}
+.carousel-scrollbar__thumb {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  min-width: 40px;
+  background: var(--blue);
+  border-radius: 999px;
+  cursor: grab;
+  touch-action: none;
+}
+.carousel-scrollbar__thumb.is-dragging { cursor: grabbing; }
 .card-jugadora--cta {
   scroll-snap-align: start;
   flex: 0 0 auto;

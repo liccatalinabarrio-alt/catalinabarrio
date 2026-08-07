@@ -14,7 +14,7 @@ function renderJugadoras() {
     <div class="card-jugadora">
       <div class="card-jugadora__photo">
         ${j.foto
-          ? `<img src="${j.foto}" alt="${j.nombre}">`
+          ? `<img src="${j.foto}" alt="${j.nombre}"${j.fotoZoom ? ` style="transform: scale(${j.fotoZoom})"` : ''}>`
           : `<span class="card-jugadora__initials">${iniciales(j.nombre)}</span>`}
         <span class="card-jugadora__flag flag-${j.pais.toLowerCase()}" title="${j.pais}"></span>
         <span class="card-jugadora__shields">
@@ -36,7 +36,7 @@ function renderJugadoras() {
       <span class="card-jugadora--cta__texto">${CTA_JUGADORAS.titulo}</span>
     </a>
   `;
-  el.innerHTML = `<div class="carousel__track">${cardsHtml}${cardsHtml}</div>`;
+  el.innerHTML = `<div class="carousel__track">${cardsHtml}</div>`;
 }
 
 // ---- Render: Testimonios ----
@@ -190,67 +190,91 @@ function initCarouselNav() {
   initCarouselArrows('track-camisetas', 'prev-camiseta', 'next-camiseta', '.card-camiseta');
 }
 
-// ---- Carrusel de jugadoras: desplazamiento continuo, igual al de los escudos del hero ----
+// ---- Carrusel de jugadoras: se mueve solo al inicio, y con una barra para desplazar manualmente ----
 function initCarouselMarquee(viewportId, cardSelector, speed = 40) {
   const viewport = document.getElementById(viewportId);
   const track = viewport?.querySelector('.carousel__track');
+  const bar = document.getElementById('jugadoras-scrollbar');
+  const thumb = document.getElementById('jugadoras-scrollbar-thumb');
   if (!viewport || !track) return;
 
-  const prev = document.getElementById('prev-jugadora');
-  const next = document.getElementById('next-jugadora');
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    if (prev) prev.style.display = 'none';
-    if (next) next.style.display = 'none';
-    return;
-  }
-
   let pos = 0;
-  let paused = true;
+  let autoplay = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let userControl = false;
   let rafId = null;
   let lastTime = null;
-  setTimeout(() => { paused = false; lastTime = null; }, 2000);
 
-  const halfWidth = () => track.scrollWidth / 2;
-  const cardStep = () => (track.querySelector(cardSelector)?.offsetWidth || 210) + 18;
+  const maxScroll = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
 
   function apply() {
     track.style.transform = `translateX(${-pos}px)`;
+    updateThumb();
+  }
+
+  function updateThumb() {
+    if (!bar || !thumb) return;
+    const ms = maxScroll();
+    const barWidth = bar.clientWidth;
+    const ratio = Math.min(1, viewport.clientWidth / track.scrollWidth);
+    const thumbWidth = Math.max(40, ratio * barWidth);
+    const thumbLeft = ms > 0 ? (pos / ms) * (barWidth - thumbWidth) : 0;
+    thumb.style.width = thumbWidth + 'px';
+    thumb.style.left = thumbLeft + 'px';
   }
 
   function frame(time) {
     if (lastTime === null) lastTime = time;
     const dt = (time - lastTime) / 1000;
     lastTime = time;
-    if (!paused) {
+    if (autoplay && !userControl) {
+      const ms = maxScroll();
       pos += speed * dt;
-      const hw = halfWidth();
-      if (pos >= hw) pos -= hw;
+      if (pos >= ms) { pos = ms; autoplay = false; }
       apply();
     }
     rafId = requestAnimationFrame(frame);
   }
-  rafId = requestAnimationFrame(frame);
+  setTimeout(() => { rafId = requestAnimationFrame(frame); }, 2000);
 
-  function pause() { paused = true; }
-  function resume() { paused = false; lastTime = null; }
+  if (!bar || !thumb) return;
+  updateThumb();
 
-  viewport.addEventListener('mouseenter', pause);
-  viewport.addEventListener('mouseleave', resume);
-  viewport.addEventListener('touchstart', pause, { passive: true });
-  viewport.addEventListener('touchend', () => setTimeout(resume, 3000), { passive: true });
-
-  function manualStep(dir) {
-    pos += dir * cardStep();
-    const hw = halfWidth();
-    if (pos >= hw) pos -= hw;
-    if (pos < 0) pos += hw;
+  function setFromClientX(clientX) {
+    const barRect = bar.getBoundingClientRect();
+    const ms = maxScroll();
+    const ratio = Math.min(1, viewport.clientWidth / track.scrollWidth);
+    const thumbWidth = Math.max(40, ratio * barRect.width);
+    const usable = barRect.width - thumbWidth;
+    const x = Math.min(Math.max(0, clientX - barRect.left - thumbWidth / 2), usable);
+    pos = usable > 0 ? (x / usable) * ms : 0;
     apply();
-    pause();
-    setTimeout(resume, 3000);
   }
-  if (prev) prev.addEventListener('click', () => manualStep(-1));
-  if (next) next.addEventListener('click', () => manualStep(1));
+
+  let dragging = false;
+  function startDrag(e) {
+    userControl = true;
+    autoplay = false;
+    dragging = true;
+    thumb.classList.add('is-dragging');
+    setFromClientX(e.touches ? e.touches[0].clientX : e.clientX);
+  }
+  function onDrag(e) {
+    if (!dragging) return;
+    setFromClientX(e.touches ? e.touches[0].clientX : e.clientX);
+  }
+  function endDrag() {
+    dragging = false;
+    thumb.classList.remove('is-dragging');
+  }
+
+  thumb.addEventListener('pointerdown', startDrag);
+  bar.addEventListener('pointerdown', startDrag);
+  window.addEventListener('pointermove', onDrag);
+  window.addEventListener('pointerup', endDrag);
+  thumb.addEventListener('touchstart', startDrag, { passive: true });
+  bar.addEventListener('touchstart', startDrag, { passive: true });
+  window.addEventListener('touchmove', onDrag, { passive: true });
+  window.addEventListener('touchend', endDrag);
 }
 
 // ---- Widget flotante: grupo de WhatsApp ----
