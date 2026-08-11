@@ -121,7 +121,7 @@ const JUGADORAS = [
     ],
   },
   {
-    nombre: "Renatta Barletta",
+    nombre: "Renata Barletta",
     posicion: "",
     pais: "AR",
     foto: "barletta.png",
@@ -278,6 +278,15 @@ const JUGADORAS = [
     fotoZoom: 1.25,
     afiliaciones: [
       { nombre: "Gimnasia y Esgrima de La Plata", escudo: "gimnasiaescudo.png" },
+    ],
+  },
+  {
+    nombre: "María Paz Comisso",
+    posicion: "",
+    pais: "AR",
+    foto: "mariapazcomisso.png",
+    afiliaciones: [
+      { nombre: "Vélez Sarsfield", escudo: "velezescudo.png" },
     ],
   },
 ];
