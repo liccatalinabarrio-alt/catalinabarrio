@@ -373,6 +373,15 @@ const EXPERIENCIA = [
   "Psicóloga deportiva — Club Atlético San Lorenzo de Almagro, Primera División Femenina",
 ];
 
+// ---- REELS (sección "Seguinos en redes") ----
+// Pegá el link del posteo/reel de Instagram tal cual (https://www.instagram.com/p/XXXX/)
+const REELS = [
+  "https://www.instagram.com/p/Db9S3Nlhgzt/",
+  "https://www.instagram.com/p/DbmLERQh39Q/",
+  "https://www.instagram.com/p/DbZH672Rdyy/",
+  "https://www.instagram.com/p/DbHQEalR9SP/",
+];
+
 // ---- CAMISETAS (galería "Gratitud en la cancha") — lugar para 8 ----
 // imagen: dejá "" para que aparezca como espacio vacío, listo para cargar
 const CAMISETAS = [

@@ -84,6 +84,29 @@ function renderCamisetas() {
   `).join('');
 }
 
+// ---- Render: Reels (Seguinos en redes) ----
+function renderReels() {
+  const el = document.getElementById('reels-grid');
+  if (!el || typeof REELS === 'undefined' || !REELS.length) return;
+  el.innerHTML = REELS.map(url => `
+    <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14"></blockquote>
+  `).join('');
+
+  function processEmbeds() {
+    if (window.instgrm) window.instgrm.Embeds.process();
+  }
+
+  if (window.instgrm) {
+    processEmbeds();
+  } else {
+    const script = document.createElement('script');
+    script.src = 'https://www.instagram.com/embed.js';
+    script.async = true;
+    script.onload = processEmbeds;
+    document.body.appendChild(script);
+  }
+}
+
 // ---- Render: Sobre mí (contacto, estudios, clubes grandes, certificaciones, experiencia) ----
 function renderSocial() {
   const el = document.getElementById('sm-social');
@@ -485,6 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderLista('sm-experiencia', EXPERIENCIA);
   initTabs();
   renderCamisetas();
+  renderReels();
   renderProgramas();
   initCarouselNav();
   initCarouselMarquee('carousel-jugadoras', '.card-jugadora');

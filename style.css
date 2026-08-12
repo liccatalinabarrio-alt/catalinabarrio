@@ -997,6 +997,19 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
   text-transform: uppercase; letter-spacing: 0.05em;
 }
 
+/* -------------------- Reels (Seguinos en redes) -------------------- */
+.reels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  justify-items: center;
+}
+.reels-grid .instagram-media {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 340px !important;
+}
+
 /* -------------------- Programa (Juga Como Sabes) -------------------- */
 .programa-jcs {
   display: flex;
