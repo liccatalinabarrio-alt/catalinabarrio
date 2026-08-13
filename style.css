@@ -1000,14 +1000,37 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
 /* -------------------- Reels (Seguinos en redes) -------------------- */
 .reels-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
 }
-.reels-grid .instagram-media {
-  margin: 0 !important;
-  width: 100% !important;
-  max-width: 340px !important;
+.reel-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  aspect-ratio: 4/5;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.reel-card:hover { border-color: var(--blue); transform: translateY(-6px); }
+.reel-card__icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--blue-bright);
+}
+.reel-card__icon svg { width: 20px; height: 20px; }
+.reel-card__label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-dim);
 }
 
 /* -------------------- Programa (Juga Como Sabes) -------------------- */
@@ -1124,27 +1147,7 @@ section { position: relative; padding: clamp(40px, 6vw, 72px) 0; }
 }
 .programas-spotlight {
   position: relative;
-  background: linear-gradient(180deg, var(--bg-panel-2) 0%, var(--bg-panel) 100%);
-  border: 1px solid rgba(111,160,255,0.25);
-  border-radius: 28px;
-  padding: clamp(28px, 5vw, 48px);
-  box-shadow:
-    0 30px 70px -30px rgba(0,0,0,0.6),
-    0 0 0 1px rgba(111,160,255,0.05) inset;
-  animation: programasFloat 7s ease-in-out infinite;
-}
-@keyframes programasFloat {
-  0%, 100% {
-    transform: translateY(0);
-    box-shadow: 0 30px 70px -30px rgba(0,0,0,0.6), 0 0 40px -8px rgba(47,111,237,0.25);
-  }
-  50% {
-    transform: translateY(-8px);
-    box-shadow: 0 40px 80px -30px rgba(0,0,0,0.65), 0 0 60px -6px rgba(47,111,237,0.4);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .programas-spotlight { animation: none; }
+  padding: clamp(12px, 2vw, 20px) 0;
 }
 #asesorias { position: relative; overflow: hidden; }
 #asesorias::before {

@@ -89,22 +89,13 @@ function renderReels() {
   const el = document.getElementById('reels-grid');
   if (!el || typeof REELS === 'undefined' || !REELS.length) return;
   el.innerHTML = REELS.map(url => `
-    <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14"></blockquote>
+    <a href="${url}" target="_blank" rel="noopener" class="reel-card">
+      <span class="reel-card__icon">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
+      </span>
+      <span class="reel-card__label">Ver reel</span>
+    </a>
   `).join('');
-
-  function processEmbeds() {
-    if (window.instgrm) window.instgrm.Embeds.process();
-  }
-
-  if (window.instgrm) {
-    processEmbeds();
-  } else {
-    const script = document.createElement('script');
-    script.src = 'https://www.instagram.com/embed.js';
-    script.async = true;
-    script.onload = processEmbeds;
-    document.body.appendChild(script);
-  }
 }
 
 // ---- Render: Sobre mí (contacto, estudios, clubes grandes, certificaciones, experiencia) ----
