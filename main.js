@@ -88,14 +88,17 @@ function renderCamisetas() {
 function renderReels() {
   const el = document.getElementById('reels-grid');
   if (!el || typeof REELS === 'undefined' || !REELS.length) return;
-  el.innerHTML = REELS.map(url => `
-    <a href="${url}" target="_blank" rel="noopener" class="reel-card">
-      <span class="reel-card__icon">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
-      </span>
-      <span class="reel-card__label">Ver reel</span>
-    </a>
-  `).join('');
+  el.innerHTML = REELS.map(url => {
+    const base = url.endsWith('/') ? url : url + '/';
+    return `
+      <a href="${url}" target="_blank" rel="noopener" class="reel-card">
+        <img src="${base}media/?size=l" alt="Reel de Catalina Barrio" loading="lazy">
+        <span class="reel-card__play">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor"/></svg>
+        </span>
+      </a>
+    `;
+  }).join('');
 }
 
 // ---- Render: Sobre mí (contacto, estudios, clubes grandes, certificaciones, experiencia) ----
@@ -182,9 +185,12 @@ function renderProgramas() {
       <div class="programa-jcs__logo-wrap">
         <img src="${p.logo}" alt="${p.nombre}" class="programa-jcs__logo">
       </div>
-      <h3 class="programa-jcs__nombre">${p.nombre}</h3>
-      <p class="programa-jcs__desc">${p.descripcion}</p>
-      <div class="programa-jcs__botones">${botones}</div>
+      <div class="programa-jcs__body">
+        <span class="programa-jcs__tag">Nuestro programa insignia</span>
+        <h3 class="programa-jcs__nombre">${p.nombre}</h3>
+        <p class="programa-jcs__desc">${p.descripcion}</p>
+        <div class="programa-jcs__botones">${botones}</div>
+      </div>
     </div>
   `;
 }
