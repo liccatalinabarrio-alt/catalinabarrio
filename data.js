@@ -374,12 +374,16 @@ const EXPERIENCIA = [
 ];
 
 // ---- REELS (sección "Seguinos en redes") ----
-// Pegá el link del posteo/reel de Instagram tal cual (https://www.instagram.com/p/XXXX/)
+// url: el link del posteo/reel de Instagram tal cual (https://www.instagram.com/p/XXXX/)
+// portada: nombre del archivo de imagen con la portada del reel (sacale una captura de
+//   pantalla al posteo y guardala en esta carpeta). Dejá "" si todavía no la tenés y se
+//   muestra un ícono en su lugar. Instagram no deja mostrar la foto automáticamente sin
+//   que subas vos la imagen.
 const REELS = [
-  "https://www.instagram.com/p/Db9S3Nlhgzt/",
-  "https://www.instagram.com/p/DbmLERQh39Q/",
-  "https://www.instagram.com/p/DbZH672Rdyy/",
-  "https://www.instagram.com/p/DbHQEalR9SP/",
+  { url: "https://www.instagram.com/p/Db9S3Nlhgzt/", portada: "reel1.png.jpg" },
+  { url: "https://www.instagram.com/p/DbmLERQh39Q/", portada: "reel2.png.jpg" },
+  { url: "https://www.instagram.com/p/DbZH672Rdyy/", portada: "reel3.png.jpg" },
+  { url: "https://www.instagram.com/p/DbHQEalR9SP/", portada: "reel4.png.jpg" },
 ];
 
 // ---- CAMISETAS (galería "Gratitud en la cancha") — lugar para 8 ----

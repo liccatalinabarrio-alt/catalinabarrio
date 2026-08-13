@@ -88,11 +88,13 @@ function renderCamisetas() {
 function renderReels() {
   const el = document.getElementById('reels-grid');
   if (!el || typeof REELS === 'undefined' || !REELS.length) return;
-  el.innerHTML = REELS.map(url => {
-    const base = url.endsWith('/') ? url : url + '/';
+  el.innerHTML = REELS.map(r => {
+    const foto = r.portada
+      ? `<img src="${r.portada}" alt="Reel de Catalina Barrio" loading="lazy">`
+      : `<span class="reel-card__icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg></span>`;
     return `
-      <a href="${url}" target="_blank" rel="noopener" class="reel-card">
-        <img src="${base}media/?size=l" alt="Reel de Catalina Barrio" loading="lazy">
+      <a href="${r.url}" target="_blank" rel="noopener" class="reel-card">
+        ${foto}
         <span class="reel-card__play">
           <svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor"/></svg>
         </span>
