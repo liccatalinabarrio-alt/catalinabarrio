@@ -14,7 +14,7 @@ function renderJugadoras() {
     <div class="card-jugadora">
       <div class="card-jugadora__photo">
         ${j.foto
-          ? `<img src="${j.foto}" alt="${j.nombre}"${j.fotoZoom ? ` style="transform: scale(${j.fotoZoom})"` : ''}>`
+          ? `<img src="${j.foto}" alt="${j.nombre}" style="${j.fotoZoom ? `transform: scale(${j.fotoZoom});` : ''}${j.fotoPos ? ` object-position: ${j.fotoPos};` : ''}">`
           : `<span class="card-jugadora__initials">${iniciales(j.nombre)}</span>`}
         <span class="card-jugadora__flag flag-${j.pais.toLowerCase()}" title="${j.pais}"></span>
         <span class="card-jugadora__shields">

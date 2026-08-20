@@ -271,11 +271,11 @@ const JUGADORAS = [
     ],
   },
   {
-    nombre: "Juana Islas Duran",
+    nombre: "Juanita Islas Duran",
     posicion: "",
     pais: "AR",
     foto: "juanaislas.png",
-    fotoZoom: 1.25,
+    fotoPos: "center 18%",
     afiliaciones: [
       { nombre: "Gimnasia y Esgrima de La Plata", escudo: "gimnasiaescudo.png" },
     ],
