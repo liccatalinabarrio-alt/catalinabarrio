@@ -276,6 +276,7 @@ const JUGADORAS = [
     pais: "AR",
     foto: "juanaislas.png",
     fotoPos: "center 18%",
+    fotoZoom: 1.2,
     afiliaciones: [
       { nombre: "Gimnasia y Esgrima de La Plata", escudo: "gimnasiaescudo.png" },
     ],
