@@ -281,6 +281,15 @@ const JUGADORAS = [
     ],
   },
   {
+    nombre: "Morena Sarmiento",
+    posicion: "",
+    pais: "AR",
+    foto: "morenasarmiento.png",
+    afiliaciones: [
+      { nombre: "River Plate", escudo: "riverescudo.png" },
+    ],
+  },
+  {
     nombre: "María Paz Comisso",
     posicion: "",
     pais: "AR",
