@@ -281,6 +281,15 @@ const JUGADORAS = [
     ],
   },
   {
+    nombre: "Alma Portillo",
+    posicion: "",
+    pais: "AR",
+    foto: "almaportillo.jpg",
+    afiliaciones: [
+      { nombre: "Club Atlético Platense", escudo: "platense.png" },
+    ],
+  },
+  {
     nombre: "Morena Sarmiento",
     posicion: "",
     pais: "AR",
