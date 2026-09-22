@@ -103,6 +103,27 @@ function renderReels() {
   }).join('');
 }
 
+// ---- Render: Podcast ----
+function renderPodcast() {
+  const el = document.getElementById('podcast-grid');
+  if (!el || typeof PODCAST === 'undefined' || !PODCAST.length) return;
+  el.innerHTML = PODCAST.map(ep => `
+    <a href="${ep.link}" target="_blank" rel="noopener" class="podcast-card">
+      <div class="podcast-card__thumb">
+        <img src="${ep.thumbnail}" alt="${ep.titulo}" loading="lazy">
+        <span class="podcast-card__play">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor"/></svg>
+        </span>
+        <span class="podcast-card__num">#${ep.numero}</span>
+      </div>
+      <div class="podcast-card__body">
+        <p class="podcast-card__title">${ep.titulo}</p>
+        <span class="podcast-card__cta">Escuchar episodio →</span>
+      </div>
+    </a>
+  `).join('');
+}
+
 // ---- Render: Sobre mí (contacto, estudios, clubes grandes, certificaciones, experiencia) ----
 function renderSocial() {
   const el = document.getElementById('sm-social');
@@ -508,6 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   renderCamisetas();
   renderReels();
+  renderPodcast();
   renderProgramas();
   initCarouselNav();
   initCarouselMarquee('carousel-jugadoras', '.card-jugadora');

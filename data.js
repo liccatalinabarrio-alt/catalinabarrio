@@ -404,6 +404,19 @@ const REELS = [
   { url: "https://www.instagram.com/p/DbHQEalR9SP/", portada: "reel4.png.jpg" },
 ];
 
+// ---- PODCAST ----
+// titulo: título del episodio tal cual en YouTube
+// thumbnail: nombre del archivo de imagen (la miniatura de YouTube), guardala en esta carpeta
+// link: el link de escucha/mirado del episodio
+const PODCAST = [
+  {
+    numero: 1,
+    titulo: "AUTOCONFIANZA en el fútbol femenino | AGUSTINA SÁNCHEZ en JUGÁ COMO SABES",
+    thumbnail: "podcast1.jpg",
+    link: "https://linktw.in/tdazfp",
+  },
+];
+
 // ---- CAMISETAS (galería "Gratitud en la cancha") — lugar para 8 ----
 // imagen: dejá "" para que aparezca como espacio vacío, listo para cargar
 const CAMISETAS = [
