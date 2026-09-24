@@ -108,7 +108,7 @@ const JUGADORAS = [
     pais: "IT",
     foto: "taborda.png",
     afiliaciones: [
-      { nombre: "Donna Roma", escudo: "donnaroma.png" },
+      { nombre: "Donna Roma", escudo: "roma.png" },
     ],
   },
   {
