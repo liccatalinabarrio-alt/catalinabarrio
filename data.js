@@ -67,10 +67,10 @@ const JUGADORAS = [
   {
     nombre: "Luciana Gómez",
     posicion: "",
-    pais: "AR",
+    pais: "BR",
     foto: "lugomez.png",
     afiliaciones: [
-      { nombre: "Belgrano de Córdoba", escudo: "belgranoescudo.png" },
+      { nombre: "Esporte Clube Vitória", escudo: "Esporte Clube Vitória.png" },
       { nombre: "Selección Femenina Uruguaya", escudo: "uruguayescudo.png" },
     ],
   },
@@ -296,6 +296,15 @@ const JUGADORAS = [
     foto: "morenasarmiento.png",
     afiliaciones: [
       { nombre: "River Plate", escudo: "riverescudo.png" },
+    ],
+  },
+  {
+    nombre: "Julieta De Luca",
+    posicion: "",
+    pais: "ES",
+    foto: "julideluca.jpg",
+    afiliaciones: [
+      { nombre: "Club Deportivo Atlético Baleares", escudo: "AtleticoBaleares.png" },
     ],
   },
   {
