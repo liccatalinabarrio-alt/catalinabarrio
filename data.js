@@ -308,6 +308,16 @@ const JUGADORAS = [
     ],
   },
   {
+    nombre: "Victoria Moran",
+    posicion: "",
+    pais: "AR",
+    foto: "victoriamoran.jpg",
+    afiliaciones: [
+      { nombre: "Real Pilar Fútbol Club", escudo: "real-pilar-logo-footylogos-1200.webp" },
+      { nombre: "Argentina Streamers", escudo: "argentinastreamers.png" },
+    ],
+  },
+  {
     nombre: "María Paz Comisso",
     posicion: "",
     pais: "AR",
